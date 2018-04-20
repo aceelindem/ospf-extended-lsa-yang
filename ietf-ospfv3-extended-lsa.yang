@@ -29,14 +29,14 @@ module ietf-ospfv3-extended-lsa {
       Author:   Acee Lindem
                 <mailto:acee@cisco.com>
       Author:   Sharmila Palani
-                <mailto:shpalani@cisco.com>
+                <mailto:shpalani@cisco.com>";
 
   description
     "This YANG module defines the configuration
      and operational state for OSPFv3 Extended LSAs, which is
      common across all of the vendor implementations.
 
-     Copyright (c) 201i IETF Trust and the persons identified as
+     Copyright (c) 2018 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -65,27 +65,91 @@ module ietf-ospfv3-extended-lsa {
        "RFC 8362 - OSPFv3 Link State Advertisement (LSA) Extensibility";
   }
 
-  /* Groupings */
+  /* 
+   * OSPFv3 Extend LSA Type Identities
+   */
+  identity ospfv3-e-router-lsa {
+    base ospf:ospfv3-lsa-type;
+    description
+      "OSPFv3 Extended Router LSA - Type 0xA021";
+  }
+
+  identity ospfv3-e-network-lsa {
+    base ospf:ospfv3-lsa-type;
+    description
+      "OSPFv3 Extended Network LSA - Type 0xA022";
+  }
+
+  identity ospfv3-e-summary-lsa-type {
+    base ospf:ospfv3-lsa-type;
+    description
+      "OSPFv3 Extended Summary LSA types";
+  }
+
+  identity ospfv3-e-inter-area-prefix-lsa {
+    base ospfv3-e-summary-lsa-type;
+    description
+      "OSPFv3 Extended Inter-area Prefix LSA - Type 0xA023";
+  }
+
+  identity ospfv3-e-inter-area-router-lsa {
+    base ospfv3-e-summary-lsa-type;
+    description
+      "OSPFv3 Exteneded Inter-area Router LSA - Type 0xA024";
+  }
+
+  identity ospfv3-e-external-lsa-type {
+    base ospf:ospfv3-lsa-type;
+    description
+      "OSPFv3 Extended External LSA types";
+  }
+
+  identity ospfv3-e-as-external-lsa {
+    base ospfv3-e-external-lsa-type;
+    description
+      "OSPFv3 Extended AS-External LSA - Type 0xC025";
+  }
+
+  identity ospfv3-e-nssa-lsa {
+    base ospfv3-e-external-lsa-type;
+    description
+      "OSPFv3 Extended Not-So-Stubby-Area (NSSA) LSA - Type 0xA027";
+  }
+
+  identity ospfv3-e-link-lsa {
+    base ospf:ospfv3-lsa-type;
+    description
+      "OSPFv3 Extended Link LSA - Type 0x8028";
+  }
+
+  identity ospfv3-e-intra-area-prefix-lsa {
+    base ospf:ospfv3-lsa-type;
+    description
+      "OSPFv3 Extended Intra-area Prefix LSA - Type 0xA029";
+  }
 
   /* Configuration */
   augment "/rt:routing/rt:control-plane-protocols"
-        + "/rt:control-plane-protocol/ospf:ospf/ospf:instance" {
-    when "../../rt:type = 'ospf:ospfv3'  {
+        + "/rt:control-plane-protocol/ospf:ospf" {
+    when "../rt:type = 'ospf:ospfv3'"  {
       description
         "This augments the OSPFv3 routing protocol when used.";
     }
     description
       "This augments the OSPFv3 protocol configuration
        with segment routing.";
-    container extended-lsa-support {
+    leaf extended-lsa-support {
       if-feature extended-lsa-support;
+      type boolean;
+      default false;
+      description
+        "Enable OSPFv3 Extended LSA Support for the OSPFv3 domain";
     }
   }
 
   augment "/rt:routing/rt:control-plane-protocols/"
-        + "rt:control-plane-protocol/ospf:ospf/ospf:instance/"
-        + "ospf:areas/ospf:area/ospf:interfaces/ospf:interface" {
-    when "../../../../../../rt:type = 'ospf:ospfv3'" {
+    + "rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area" {
+    when "../../../../../rt:type = 'ospf:ospfv3'" {
       description
         "This augments the OSPFv3 area configuration
          when used.";
@@ -93,251 +157,61 @@ module ietf-ospfv3-extended-lsa {
     description
       "This augments the OSPFv3 protocol area
        configuration with Extend LSA support";
-
-    uses sr:igp-interface-cfg;
+    leaf extended-lsa-support {
+      if-feature extended-lsa-support;
+      type boolean;
+      default false;
+      description
+        "Enable OSPFv3 Extended LSA Support for the OSPFv3 area";
+    }
   }
 
-  /* Database */
+  /* 
+   * Link State Database (LSDB) Augmentations
+  */
   augment "/rt:routing/"
-        + "rt:control-plane-protocols/rt:control-plane-protocol/"
-        + "ospf:ospf/ospf:instance/ospf:areas/ospf:area/"
-        + "ospf:interfaces/ospf:interface/ospf:database/"
-        + "ospf:link-scope-lsa-type/ospf:link-scope-lsas/"
-        + "ospf:link-scope-lsa/ospf:version/ospf:ospfv2/"
-        + "ospf:ospfv2/ospf:body/ospf:opaque/"
-        + "ospf:extended-prefix-tlvs/ospf:extended-prefix-tlv" {
-    when "../../../../../../../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv2'" {
+    + "rt:control-plane-protocols/rt:control-plane-protocol/"
+    + "ospf:ospf/ospf:areas/ospf:area/"
+    + "ospf:interfaces/ospf:interface/ospf:database/"
+    + "ospf:link-scope-lsa-type/ospf:link-scope-lsas/"
+    + "ospf:link-scope-lsa/ospf:version/ospf:ospfv3/"
+    + "ospf:ospfv3/ospf:body" {
+    when "../../../../../../../../../../../../"
+       + "rt:type = 'ospf:ospfv3'" {
       description
-        "This augmentation is only valid for OSPFv2.";
+        "This augmentation is only valid for OSPFv3.";
     }
     description
-      "SR specific TLVs for OSPFv2 extended prefix TLV
-       in type 9 opaque LSA.";
-    uses prefix-sid-sub-tlvs;
+      "OSPFv3 Link-Scoped Extended LSAs";
   }
 
   augment "/rt:routing/"
-        + "rt:control-plane-protocols/rt:control-plane-protocol/"
-        + "ospf:ospf/ospf:instance/ospf:areas/"
-        + "ospf:area/ospf:database/"
-        + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
-        + "ospf:area-scope-lsa/ospf:version/ospf:ospfv2/"
-        + "ospf:ospfv2/ospf:body/ospf:opaque/"
-        + "ospf:extended-prefix-tlvs/ospf:extended-prefix-tlv" {
-    when "../../../../../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv2'" {
+    + "rt:control-plane-protocols/rt:control-plane-protocol/"
+    + "ospf:ospf/ospf:areas/ospf:area/ospf:database/"
+    + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
+    + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
+    + "ospf:ospfv3/ospf:body" {
+    when "../../../../../../../../../../"
+       + "rt:type = 'ospf:ospfv3'" {
       description
-        "This augmentation is only valid for OSPFv2.";
+        "This augmentation is only valid for OSPFv3.";
     }
     description
-      "SR specific TLVs for OSPFv2 extended prefix TLV
-       in type 10 opaque LSA.";
-    uses prefix-sid-sub-tlvs;
+      "OSPFv3 Area-Scoped Extended LSAs";
   }
 
   augment "/rt:routing/"
-        + "rt:control-plane-protocols/rt:control-plane-protocol/"
-        + "ospf:ospf/ospf:instance/ospf:database/"
-        + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
-        + "ospf:as-scope-lsa/ospf:version/ospf:ospfv2/"
-        + "ospf:ospfv2/ospf:body/ospf:opaque/"
-        + "ospf:extended-prefix-tlvs/ospf:extended-prefix-tlv" {
-    when "../../../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv2'" {
-      description
-        "This augmentation is only valid for OSPFv2.";
-    }
-    description
-      "SR specific TLVs for OSPFv2 extended prefix TLV
-       in type 11 opaque LSA.";
-    uses prefix-sid-sub-tlvs;
-  }
-
-  augment "/rt:routing/"
-        + "rt:control-plane-protocols/rt:control-plane-protocol/"
-        + "ospf:ospf/ospf:instance/ospf:areas/"
-        + "ospf:area/ospf:database/"
-        + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
-        + "ospf:area-scope-lsa/ospf:version/ospf:ospfv2/"
-        + "ospf:ospfv2/ospf:body/ospf:opaque/"
-        + "ospf:extended-link-tlvs/ospf:extended-link-tlv" {
-    when "../../../../../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv2'" {
-      description
-        "This augmentation is only valid for OSPFv2.";
-    }
-    description
-      "SR specific TLVs for OSPFv2 extended link TLV
-       in type 10 opaque LSA.";
-
-    container adj-sid-sub-tlvs {
-      description "Adjacency SID optional sub-TLVs.";
-      list adj-sid-sub-tlv {
-        description "List of Adjacency SID sub-TLVs.";
-        leaf flags {
-          type bits {
-            bit B {
-              position 0;
-              description
-                "Backup flag.";
-            }
-            bit V {
-              position 1;
-              description
-                "Value/Index flag.";
-            }
-            bit L {
-              position 2;
-              description
-                "Local/Global flag.";
-            }
-            bit G {
-              position 3;
-              description
-                "Group flag.";
-            }
-            bit P {
-              position 4;
-              description
-                "Persistent flag.";
-            }
-          }
-          description "Flags.";
-        }
-        leaf mt-id {
-          type uint8;
-          description "Multi-topology ID.";
-        }
-        leaf weight {
-          type uint8;
-          description "Weight used for load-balancing.";
-        }
-        leaf sid {
-          type uint32;
-          description "Segment Identifier (SID) index/label.";
-        }
-      }
-    }
-
-    container lan-adj-sid-sub-tlvs {
-      description "LAN Adjacency SID optional sub-TLVs.";
-      list lan-adj-sid-sub-tlv {
-        description "List of LAN adjacency SID sub-TLVs.";
-        leaf flags {
-          type bits {
-            bit B {
-              position 0;
-              description
-                "Backup flag.";
-            }
-            bit V {
-              position 1;
-              description
-                "Value/Index flag.";
-            }
-            bit L {
-              position 2;
-              description
-                "Local/Global flag.";
-            }
-            bit G {
-              position 3;
-              description
-                "Group flag.";
-            }
-            bit P {
-              position 4;
-              description
-                "Persistent flag.";
-            }
-          }
-          description "Flags.";
-        }
-        leaf mt-id {
-          type uint8;
-          description "Multi-topology ID.";
-        }
-        leaf weight {
-          type uint8;
-          description "Weight used for load-balancing.";
-        }
-        leaf neighbor-router-id {
-          type yang:dotted-quad;
-          description "Neighbor router ID.";
-        }
-        leaf sid {
-          type uint32;
-          description "Segment Identifier (SID) index/label.";
-        }
-      }
-    }
-  }
-
-  augment "/rt:routing/"
-        + "rt:control-plane-protocols/rt:control-plane-protocol/"
-        + "ospf:ospf/ospf:instance/ospf:areas/ospf:area/"
-        + "ospf:interfaces/ospf:interface/ospf:database/"
-        + "ospf:link-scope-lsa-type/ospf:link-scope-lsas/"
-        + "ospf:link-scope-lsa/ospf:version/ospf:ospfv2/"
-        + "ospf:ospfv2/ospf:body/ospf:opaque" {
-    when "../../../../../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv2'" {
-      description
-        "This augmentation is only valid for OSPFv2.";
-    }
-
-    description
-      "SR specific TLVs for OSPFv2 type 9 opaque LSA.";
-
-    uses extended-prefix-range-tlvs;
-    uses sr-algorithm-tlv;
-    uses sid-range-tlvs;
-    uses local-block-tlvs;
-    uses srms-preference-tlv;
-  }
-
-  augment "/rt:routing/"
-        + "rt:control-plane-protocols/rt:control-plane-protocol/"
-        + "ospf:ospf/ospf:instance/ospf:areas/"
-        + "ospf:area/ospf:database/"
-        + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
-        + "ospf:area-scope-lsa/ospf:version/ospf:ospfv2/"
-        + "ospf:ospfv2/ospf:body/ospf:opaque" {
-    when "../../../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv2'" {
-      description
-        "This augmentation is only valid for OSPFv2.";
-    }
-
-    description
-      "SR specific TLVs for OSPFv2 type 10 opaque LSA.";
-
-    uses extended-prefix-range-tlvs;
-    uses sr-algorithm-tlv;
-    uses sid-range-tlvs;
-    uses local-block-tlvs;
-    uses srms-preference-tlv;
-  }
-
-  augment "/rt:routing/"
-        + "rt:control-plane-protocols/rt:control-plane-protocol/"
-        + "ospf:ospf/ospf:instance/ospf:database/"
-        + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
-        + "ospf:as-scope-lsa/ospf:version/ospf:ospfv2/"
-        + "ospf:ospfv2/ospf:body/ospf:opaque" {
+    + "rt:control-plane-protocols/rt:control-plane-protocol/"
+    + "ospf:ospf/ospf:database/"
+    + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
+    + "ospf:as-scope-lsa/ospf:version/ospf:ospfv3/"
+    + "ospf:ospfv3/ospf:body" {
     when "../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv2'" {
+      + "rt:type = 'ospf:ospfv3'" {
       description
-        "This augmentation is only valid for OSPFv2.";
+        "This augmentation is only valid for OSPFv3.";
     }
     description
-      "SR specific TLVs for OSPFv2 type 11 opaque LSA.";
-
-    uses extended-prefix-range-tlvs;
-    uses sr-algorithm-tlv;
-    uses sid-range-tlvs;
-    uses local-block-tlvs;
-    uses srms-preference-tlv;
+      "OSPFv3 AS-Scoped Extended LSAs";
   }
 }
