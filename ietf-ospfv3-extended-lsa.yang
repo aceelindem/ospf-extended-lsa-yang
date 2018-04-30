@@ -3,14 +3,8 @@ module ietf-ospfv3-extended-lsa {
 
   prefix ospfv3-elsa;
 
-  import ietf-inet-types {
-    prefix "inet";
-    reference "RFC 6021 - Common YANG Data Types";
-  }
-
-  import ietf-yang-types {
-    prefix "yang";
-    reference "RFC 6021 - Common YANG Data Types";
+  import ietf-routing-types {
+    prefix "rt-types";
   }
 
   import ietf-routing {
@@ -134,6 +128,130 @@ module ietf-ospfv3-extended-lsa {
       "OSPFv3 Extended Intra-area Prefix LSA - Type 0xA029";
   }
 
+  grouping ospfv3-lsa-options {
+    description "OSPFv3 LSA options";
+    leaf options {
+      type bits {
+        bit AF {
+          description
+            "When set, the router supprts OSPFv3 AFs as in RFC5838.";
+        }
+        bit DC {
+          description
+            "When set, the router supports demand circuits.";
+        }
+        bit R {
+          description
+            "When set, the originator is an active router.";
+        }
+        bit N {
+          description
+            "If set, the router is attached to an NSSA";
+        }
+        bit E {
+          description
+            "This bit describes the way AS-external LSAs
+             are flooded";
+        }
+        bit V6 {
+          description
+            "If clear, the router/link should be excluded
+             from IPv6 routing calculaton";
+        }
+      }
+      description "OSPFv3 LSA options.";
+    }
+  }
+
+  grouping ospfv3-e-lsa-body {
+    description "OSPFv3 Extended LSA body.";
+    container e-router {
+      when  "derived-from-or-self(../header/type, "
+        + "'ospfv3-e-router-lsa')" {
+        description "Only valid for OSPFv3 Extended-Router LSAs"; 
+      }
+      description "OSPv3 Extended Router LSA.";
+      leaf flags {
+        type bits {
+          bit V {
+            description
+              "When set, the router is an endpoint of one or
+               more virtual links.";
+          }
+          bit E {
+            description
+              "When set, the router is an AS Boundary Router
+               (ASBR).";
+          }
+          bit B {
+            description
+              "When set, the router is an Area Border
+               Router (ABR).";
+          }
+          bit Nt {
+            description
+              "When set, the router is an NSSA border router
+               that is unconditionally translating NSSA LSAs
+               into AS-external LSAs.";
+          }
+        }
+        description "Router LSA flags.";
+      }
+      uses ospfv3-lsa-options;
+
+      list e-router-tlvs {
+        description "E-Router LSA TLVs";
+        container e-router-tlv {
+          uses ospf:tlv;
+          description "Generic E-Router TLV";
+        }
+        container link-tlv {
+          when "../e-router-tlv/ospf:type = 1";
+          leaf link-tlv-type {
+            type uint16;
+            description "Link TLV Type - 1";
+          } 
+          leaf link-tlv-length {
+            type uint16;
+            description 
+              "Link TLV Length - Variable dependent on sub-TLVs";
+          } 
+          leaf interface-id {
+            type uint32;
+            description "Interface ID for link.";
+          }
+          leaf neighbor-interface-id {
+            type uint32;
+            description "Neighbor's Interface ID for link.";
+          }
+          leaf neighbor-router-id {
+            type rt-types:router-id;
+            description "Neighbor's Router ID for link.";
+          }
+          leaf type {
+            type uint8;
+            description "Link type: 1 - Point-to-Point Link
+                                    2 - Transit Network Link
+                                    3 - Stub Network Link Link
+                                    4 - Virtual Link";
+          }
+          leaf metric {
+            type uint16;
+              description "Link Metric.";
+          }
+          list sub-tlvs {
+            description "E-Router LSA TLVs";
+            container sub-tlv {
+              uses ospf:tlv;
+              description "Generic Link TLV Sub-TLV";
+            }
+          }
+        }
+      }
+    }
+
+  }
+
   /* Configuration */
   augment "/rt:routing/rt:control-plane-protocols"
         + "/rt:control-plane-protocol/ospf:ospf" {
@@ -197,11 +315,13 @@ module ietf-ospfv3-extended-lsa {
     + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
     + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
     + "ospf:ospfv3/ospf:body" {
-    when "../../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv3'" {
+    when "../../../../../../../../../"
+      + "rt:type = 'ospf:ospfv3'" { 
       description
-        "This augmentation is only valid for OSPFv3.";
+        "This augmentation is only valid for OSPFv3
+         E-Router LSAs";
     }
+    uses ospfv3-e-lsa-body;
     description
       "OSPFv3 Area-Scoped Extended LSAs";
   }
@@ -217,6 +337,7 @@ module ietf-ospfv3-extended-lsa {
       description
         "This augmentation is only valid for OSPFv3.";
     }
+    uses ospfv3-e-lsa-body;
     description
       "OSPFv3 AS-Scoped Extended LSAs";
   }
