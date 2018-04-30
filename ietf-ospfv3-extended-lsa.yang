@@ -5,18 +5,24 @@ module ietf-ospfv3-extended-lsa {
 
   import ietf-inet-types {
     prefix "inet";
+    reference "RFC 6021 - Common YANG Data Types";
   }
 
   import ietf-yang-types {
     prefix "yang";
+    reference "RFC 6021 - Common YANG Data Types";
   }
 
   import ietf-routing {
     prefix "rt";
+    reference "RFC 8349 - A YANG Data Model for Routing
+               Management (NMDA Version)";
   }
 
   import ietf-ospf {
     prefix "ospf";
+    reference "RFC XXXX - A YANG Data Model for OSPF
+               Protocol";
   }
 
   organization
