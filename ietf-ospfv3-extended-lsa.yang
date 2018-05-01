@@ -1,10 +1,16 @@
 module ietf-ospfv3-extended-lsa {
-  namespace "urn:ietf:params:xml:ns:yang:ietf-ospfv3-extended-lsa";
+  yang-version 1.1;
+  namespace "urn:iDWetf:params:xml:ns:yang:ietf-ospfv3-extended-lsa";
 
-  prefix ospfv3-elsa;
+  prefix ospfv3-e-lsa;
 
   import ietf-routing-types {
     prefix "rt-types";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+    reference "RFC 6021 - Common YANG Data Types";
   }
 
   import ietf-routing {
@@ -159,10 +165,48 @@ module ietf-ospfv3-extended-lsa {
     }
   }
 
+  grouping ospfv3-lsa-prefix {
+    description
+      "OSPFv3 LSA prefix.";
+
+    leaf prefix {
+      type inet:ip-prefix;
+      description
+        "LSA Prefix.";
+    }
+    leaf prefix-options {
+      type bits {
+        bit NU {
+          description
+            "When set, the prefix should be excluded
+             from IPv6 unicast calculations.";
+        }
+        bit LA {
+          description
+            "When set, the prefix is actually an IPv6 interface
+             address of the Advertising Router.";
+        }
+        bit P {
+          description
+            "When set, the NSSA area prefix should be
+             translated to an AS External LSA and readvertised
+             by the translating NSSA Border Router.";
+        }
+        bit DN {
+          description
+            "When set, the inter-area-prefix LSA or
+             AS-external LSA prefix has been advertised as an
+             L3VPN prefix.";
+        }
+      }
+      description "Prefix options.";
+    }
+  }
+
   grouping ospfv3-e-lsa-body {
     description "OSPFv3 Extended LSA body.";
     container e-router {
-      when  "derived-from-or-self(../header/type, "
+      when  "derived-from(../header/type, "
         + "'ospfv3-e-router-lsa')" {
         description "Only valid for OSPFv3 Extended-Router LSAs"; 
       }
@@ -236,7 +280,7 @@ module ietf-ospfv3-extended-lsa {
               description "Link Metric.";
           }
           list sub-tlvs {
-            description "E-Router LSA TLVs";
+            description "Link TLV Sub-TLVs";
             container sub-tlv {
               uses ospf:tlv;
               description "Generic Link TLV Sub-TLV";
@@ -245,7 +289,130 @@ module ietf-ospfv3-extended-lsa {
         }
       }
     }
-
+    container e-network {
+      when "derived-from(../../header/type, "
+         + "'ospfv3-e-network-lsa')" {
+        description
+          "Only applies to E-Network LSAs.";
+      }
+      description "Extended Network LSA.";
+      uses ospfv3-lsa-options;
+      list e-network-tlvs {
+        description "E-Network LSA TLVs";
+        container e-network-tlv {
+          uses ospf:tlv;
+          description "Generic E-Network TLV";
+        }
+        container attached-router-tlv {
+          when "../e-network-tlv/ospf:type = 2";
+          leaf attached-router-tlv-type {
+            type uint16;
+            description "Attached Router TLV Type - 2";
+          } 
+          leaf attached-router-tlv-length {
+            type uint16;
+            description 
+              "Attached Router TLV Length - Variable dependent 
+               on sub-TLVs";
+          } 
+          leaf Adjacent-neighbor-router-id {
+            type rt-types:router-id;
+            description "Adjacent Neighbor's Router ID";
+          }
+          list sub-tlvs {
+            description "Attached Router TLV Sub-TLVs";
+            container sub-tlv {
+              uses ospf:tlv;
+              description "Generic Attached Router TLV Sub-TLV";
+            }
+          }
+        }
+      }
+    }
+    container e-inter-area-prefix {
+      when "derived-from(../../header/type, "
+         + "'ospfv3-e-inter-area-prefix-lsa')" {
+        description
+          "Only applies to E-Inter-Area-Prefix LSAs.";
+      }
+      description "Extended Inter-Area Prefix LSA.";
+      list e-inter-prefix-tlvs {
+        description "E-Inter-Area-Prefix LSA TLVs";
+        container e-inter-prefix-tlv {
+          uses ospf:tlv;
+          description "Generic E-Inter-Area-Prefix TLV";
+        }
+        container inter-prefix-tlv {
+          when "../e-inter-prefix-tlv/ospf:type = 3";
+          leaf inter-prefix-tlv-type {
+            type uint16;
+            description "Inter-Area Prerix TLV Type - 3";
+          } 
+          leaf inter-prefix-tlv-length {
+            type uint16;
+            description 
+              "Inter-Area-Prefix TLV Length - Variable dependent
+               on sub-TLVs";
+          } 
+          leaf metric {
+            type rt-types:uint24;
+              description "Inter-Area Prefix Metric.";
+          }
+          uses ospfv3-lsa-prefix;
+          list sub-tlvs {
+            description "Inter-Area Prefix TLV Sub-TLVs";
+            container sub-tlv {
+              uses ospf:tlv;
+              description "Generic Inter-Area Prefix TLV Sub-TLV";
+            }
+          }
+        }
+      }
+    }
+    container e-inter-area-router {
+      when "derived-from(../../header/type, "
+         + "'ospfv3-e-inter-area-router-lsa')" {
+        description
+          "Only applies to E-Inter-Area-Router LSAs.";
+      }
+      description "Extended Inter-Area Router LSA.";
+      list e-inter-router-tlvs {
+        description "E-Inter-Area-Router LSA TLVs";
+        container e-inter-router-tlv {
+          uses ospf:tlv;
+          description "Generic E-Inter-Area-Router TLV";
+        }
+        container inter-router-tlv {
+          when "../e-inter-router-tlv/ospf:type = 4";
+          leaf inter-routerx-tlv-type {
+            type uint16;
+            description "Inter-Area Router TLV Type - 4";
+          } 
+          leaf inter-router-tlv-length {
+            type uint16;
+            description 
+              "Inter-Area-Router TLV Length - Variable dependent
+               on sub-TLVs";
+          } 
+          uses ospfv3-lsa-options;
+          leaf metric {
+            type rt-types:uint24;
+              description "Inter-Area Router Metric.";
+          }
+          leaf destination-router-id {
+            type rt-types:router-id;
+            description "Destination Router ID";
+          }
+          list sub-tlvs {
+            description "Inter-Area Router TLV Sub-TLVs";
+            container sub-tlv {
+              uses ospf:tlv;
+              description "Generic Inter-Area Router TLV Sub-TLV";
+            }
+          }
+        }
+      }
+    }
   }
 
   /* Configuration */
