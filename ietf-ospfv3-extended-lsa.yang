@@ -279,6 +279,39 @@ module ietf-ospfv3-extended-lsa {
       "Route Tag Sub-TLV grouping";
   }
 
+  grouping  external-prefix-tlv {
+    container external-prefix-tlv {
+      when "../e-external-tlv/ospf:type = 5";
+      description "Generic External Prefix LSA TLV";
+      leaf external-prefix-tlv-type {
+        type uint16;
+        description "External Prefix TLV Type - 5";
+      }
+      leaf external-prefix-tlv-length {
+        type uint16;
+        description
+          "External Prefix TLV Length - Variable dependent
+               on sub-TLVs";
+      }
+      leaf metric {
+        type rt-types:uint24;
+        description "External Prefix Metric";
+      }
+      uses ospfv3-lsa-prefix;
+      list sub-tlvs {
+        description "External Prefix TLV Sub-TLVs";
+        container sub-tlv {
+          uses ospf:tlv;
+          description "Generic External Prefix TLV Sub-TLV";
+        }
+        uses ipv6-fwd-addr-sub-tlv;
+        uses ipv4-fwd-addr-sub-tlv;
+        uses route-tag-sub-tlv;
+      }
+    }
+    description "External Prefix TLV Grouping";
+  }
+
   grouping ospfv3-e-lsa-body {
     description "OSPFv3 Extended LSA body.";
     container e-router {
@@ -366,6 +399,7 @@ module ietf-ospfv3-extended-lsa {
         }
       }
     }
+
     container e-network {
       when "derived-from(../../header/type, "
          + "'ospfv3-e-network-lsa')" {
@@ -407,6 +441,7 @@ module ietf-ospfv3-extended-lsa {
         }
       }
     }
+
     container e-inter-area-prefix {
       when "derived-from(../../header/type, "
          + "'ospfv3-e-inter-area-prefix-lsa')" {
@@ -425,7 +460,7 @@ module ietf-ospfv3-extended-lsa {
           description "Generic E-Inter-Area-Prefix LSA TLV";
           leaf inter-prefix-tlv-type {
             type uint16;
-            description "Inter-Area Prerix TLV Type - 3";
+            description "Inter-Area Prefix TLV Type - 3";
           }
           leaf inter-prefix-tlv-length {
             type uint16;
@@ -448,6 +483,7 @@ module ietf-ospfv3-extended-lsa {
         }
       }
     }
+
     container e-inter-area-router {
       when "derived-from(../../header/type, "
          + "'ospfv3-e-inter-area-router-lsa')" {
@@ -493,6 +529,41 @@ module ietf-ospfv3-extended-lsa {
         }
       }
     }
+
+    container e-as-external {
+      when "derived-from-or-self(../../header/type, "
+         + "'ospfv3-e-as-external-lsa')" {
+        description
+          "Only applies to E-AS-external LSAs.";
+      }
+      list e-external-tlvs {
+        description "E-External LSA TLVs";
+        container e-external-tlv {
+          uses ospf:tlv;
+          description "Generic E-External TLV";
+        }
+        uses external-prefix-tlv;
+      }
+      description "E-AS-External LSA.";
+    }
+
+    container e-nssa {
+      when "derived-from-or-self(../../header/type, "
+         + "'ospfv3-e-nssa-lsa')" {
+        description
+          "Only applies to E-NSSA LSAs.";
+      }
+      list e-external-tlvs {
+        description "E-NSSA LSA TLVs";
+        container e-external-tlv {
+          uses ospf:tlv;
+          description "Generic E-External TLV";
+        }
+        uses external-prefix-tlv;
+      }
+      description "E-NSSA LSA.";
+    }
+
   }
 
   /* Configuration */
