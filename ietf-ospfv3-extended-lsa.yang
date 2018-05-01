@@ -1,6 +1,6 @@
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
-  namespace "urn:iDWetf:params:xml:ns:yang:ietf-ospfv3-extended-lsa";
+  namespace "urn:ietf:params:xml:ns:yang:ietf-ospfv3-extended-lsa";
 
   prefix ospfv3-e-lsa;
 
@@ -71,7 +71,7 @@ module ietf-ospfv3-extended-lsa {
        "RFC 8362 - OSPFv3 Link State Advertisement (LSA) Extensibility";
   }
 
-  /* 
+  /*
    * OSPFv3 Extend LSA Type Identities
    */
   identity ospfv3-e-router-lsa {
@@ -165,18 +165,18 @@ module ietf-ospfv3-extended-lsa {
              from IPv6 routing calculaton";
         }
       }
-      description "OSPFv3 LSA options.";
+      description "OSPFv3 LSA options";
     }
   }
 
   grouping ospfv3-lsa-prefix {
     description
-      "OSPFv3 LSA prefix.";
+      "OSPFv3 LSA prefix";
 
     leaf prefix {
       type inet:ip-prefix;
       description
-        "LSA Prefix.";
+        "LSA Prefix";
     }
     leaf prefix-options {
       type bits {
@@ -203,8 +203,80 @@ module ietf-ospfv3-extended-lsa {
              L3VPN prefix.";
         }
       }
-      description "Prefix options.";
+      description "Prefix options";
     }
+  }
+
+  grouping ipv6-fwd-addr-sub-tlv {
+    container ipv6-fwd-addr-sub-tlv {
+      when "../external-prefix-tlv/ospf:type = 1";
+      description
+        "IPv6 Forwarding Address Sub-TLV";
+      leaf ipv6-fwd-addr-sub-tlv-type {
+        type uint16;
+        description "IPv6 Forwarding Address Sub-TLV Type - 1";
+      }
+      leaf ipv6-fwd-addr-sub-tlv-length {
+        type uint16;
+        description
+          "IPv4 Forwarding Addrss Sub-TLV Length - 4 for IPv4 address";
+      }
+      leaf forwarding-address {
+        type inet:ipv6-address;
+        description
+          "Forwarding address";
+      }
+    }
+    description
+      "IPv6 Forwarding Address Sub-TLV grouping";
+  }
+
+  grouping ipv4-fwd-addr-sub-tlv {
+    container ipv4-fwd-addr-sub-tlv {
+      when "../external-prefix-tlv/ospf:type = 2";
+      description
+        "IPv4 Forwarding Address Sub-TLV";
+      leaf ipv4-fwd-addr-sub-tlv-type {
+        type uint16;
+        description "IPv4 Forwarding Address Sub-TLV Type - 2";
+      }
+      leaf ipv4-fwd-addr-sub-tlv-length {
+        type uint16;
+        description
+          "IPv4 Forwarding Addrss Sub-TLV Length - 4 for IPv4 address";
+      }
+      leaf forwarding-address {
+        type inet:ipv4-address;
+        description
+          "Forwarding address";
+      }
+    }
+    description
+      "IPv4 Forwarding Address Sub-TLV grouping";
+  }
+
+  grouping route-tag-sub-tlv {
+    container route-tag-sub-tlv {
+      when "../external-prefix-tlv/ospf:type = 3";
+      description
+        "Route Tag Sub-TLV";
+      leaf route-tag-sub-tlv-type {
+        type uint16;
+        description "Route Tag Sub-TLV Type - 3";
+      }
+      leaf route-tag-sub-tlv-length {
+        type uint16;
+        description
+          "Route Tag Sub-TLV Length - 4 for 32-bit tag";
+      }
+      leaf route-tag {
+        type uint32;
+        description
+          "Route Tag";
+      }
+    }
+    description
+      "Route Tag Sub-TLV grouping";
   }
 
   grouping ospfv3-e-lsa-body {
@@ -212,9 +284,9 @@ module ietf-ospfv3-extended-lsa {
     container e-router {
       when  "derived-from(../header/type, "
         + "'ospfv3-e-router-lsa')" {
-        description "Only valid for OSPFv3 Extended-Router LSAs"; 
+        description "Only valid for OSPFv3 Extended-Router LSAs";
       }
-      description "OSPv3 Extended Router LSA.";
+      description "OSPv3 Extended Router LSA";
       leaf flags {
         type bits {
           bit V {
@@ -239,7 +311,7 @@ module ietf-ospfv3-extended-lsa {
                into AS-external LSAs.";
           }
         }
-        description "Router LSA flags.";
+        description "Router LSA flags";
       }
       uses ospfv3-lsa-options;
 
@@ -251,26 +323,27 @@ module ietf-ospfv3-extended-lsa {
         }
         container link-tlv {
           when "../e-router-tlv/ospf:type = 1";
+          description "E-Router LSA TLV";
           leaf link-tlv-type {
             type uint16;
             description "Link TLV Type - 1";
-          } 
+          }
           leaf link-tlv-length {
             type uint16;
-            description 
+            description
               "Link TLV Length - Variable dependent on sub-TLVs";
-          } 
+          }
           leaf interface-id {
             type uint32;
-            description "Interface ID for link.";
+            description "Interface ID for link";
           }
           leaf neighbor-interface-id {
             type uint32;
-            description "Neighbor's Interface ID for link.";
+            description "Neighbor's Interface ID for link";
           }
           leaf neighbor-router-id {
             type rt-types:router-id;
-            description "Neighbor's Router ID for link.";
+            description "Neighbor's Router ID for link";
           }
           leaf type {
             type uint8;
@@ -281,7 +354,7 @@ module ietf-ospfv3-extended-lsa {
           }
           leaf metric {
             type uint16;
-              description "Link Metric.";
+              description "Link Metric";
           }
           list sub-tlvs {
             description "Link TLV Sub-TLVs";
@@ -299,7 +372,7 @@ module ietf-ospfv3-extended-lsa {
         description
           "Only applies to E-Network LSAs.";
       }
-      description "Extended Network LSA.";
+      description "Extended Network LSA";
       uses ospfv3-lsa-options;
       list e-network-tlvs {
         description "E-Network LSA TLVs";
@@ -309,16 +382,17 @@ module ietf-ospfv3-extended-lsa {
         }
         container attached-router-tlv {
           when "../e-network-tlv/ospf:type = 2";
+          description "Attached Router TLV";
           leaf attached-router-tlv-type {
             type uint16;
             description "Attached Router TLV Type - 2";
-          } 
+          }
           leaf attached-router-tlv-length {
             type uint16;
-            description 
-              "Attached Router TLV Length - Variable dependent 
+            description
+              "Attached Router TLV Length - Variable dependent
                on sub-TLVs";
-          } 
+          }
           leaf Adjacent-neighbor-router-id {
             type rt-types:router-id;
             description "Adjacent Neighbor's Router ID";
@@ -339,7 +413,7 @@ module ietf-ospfv3-extended-lsa {
         description
           "Only applies to E-Inter-Area-Prefix LSAs.";
       }
-      description "Extended Inter-Area Prefix LSA.";
+      description "Extended Inter-Area Prefix LSA";
       list e-inter-prefix-tlvs {
         description "E-Inter-Area-Prefix LSA TLVs";
         container e-inter-prefix-tlv {
@@ -348,19 +422,20 @@ module ietf-ospfv3-extended-lsa {
         }
         container inter-prefix-tlv {
           when "../e-inter-prefix-tlv/ospf:type = 3";
+          description "Generic E-Inter-Area-Prefix LSA TLV";
           leaf inter-prefix-tlv-type {
             type uint16;
             description "Inter-Area Prerix TLV Type - 3";
-          } 
+          }
           leaf inter-prefix-tlv-length {
             type uint16;
-            description 
+            description
               "Inter-Area-Prefix TLV Length - Variable dependent
                on sub-TLVs";
-          } 
+          }
           leaf metric {
             type rt-types:uint24;
-              description "Inter-Area Prefix Metric.";
+              description "Inter-Area Prefix Metric";
           }
           uses ospfv3-lsa-prefix;
           list sub-tlvs {
@@ -379,7 +454,7 @@ module ietf-ospfv3-extended-lsa {
         description
           "Only applies to E-Inter-Area-Router LSAs.";
       }
-      description "Extended Inter-Area Router LSA.";
+      description "Extended Inter-Area Router LSA";
       list e-inter-router-tlvs {
         description "E-Inter-Area-Router LSA TLVs";
         container e-inter-router-tlv {
@@ -388,20 +463,21 @@ module ietf-ospfv3-extended-lsa {
         }
         container inter-router-tlv {
           when "../e-inter-router-tlv/ospf:type = 4";
+          description "Generic E-Inter-Area-Router LSA TLV";
           leaf inter-routerx-tlv-type {
             type uint16;
             description "Inter-Area Router TLV Type - 4";
-          } 
+          }
           leaf inter-router-tlv-length {
             type uint16;
-            description 
+            description
               "Inter-Area-Router TLV Length - Variable dependent
                on sub-TLVs";
-          } 
+          }
           uses ospfv3-lsa-options;
           leaf metric {
             type rt-types:uint24;
-              description "Inter-Area Router Metric.";
+              description "Inter-Area Router Metric";
           }
           leaf destination-router-id {
             type rt-types:router-id;
@@ -457,7 +533,7 @@ module ietf-ospfv3-extended-lsa {
     }
   }
 
-  /* 
+  /*
    * Link State Database (LSDB) Augmentations
   */
   augment "/rt:routing/"
@@ -483,7 +559,7 @@ module ietf-ospfv3-extended-lsa {
     + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
     + "ospf:ospfv3/ospf:body" {
     when "../../../../../../../../../"
-      + "rt:type = 'ospf:ospfv3'" { 
+      + "rt:type = 'ospf:ospfv3'" {
       description
         "This augmentation is only valid for OSPFv3
          E-Router LSAs";
