@@ -137,72 +137,6 @@ module ietf-ospfv3-extended-lsa {
       "OSPFv3 Extended Intra-area Prefix LSA - Type 0xA029";
   }
 
-  grouping ospfv3-lsa-options {
-    description "OSPFv3 LSA options";
-    leaf options {
-      type bits {
-        bit AF {
-          description
-            "When set, the router supprts OSPFv3 AFs as
-             in RFC5838.";
-        }
-        bit DC {
-          description
-            "When set, the router supports demand circuits.";
-        }
-        bit R {
-          description
-            "When set, the originator is an active router.";
-        }
-        bit N {
-          description
-            "If set, the router is attached to an NSSA";
-        }
-        bit E {
-          description
-            "This bit describes the way AS-external LSAs
-             are flooded";
-        }
-        bit V6 {
-          description
-            "If clear, the router/link should be excluded
-             from IPv6 routing calculaton";
-        }
-      }
-      description "OSPFv3 LSA options";
-    }
-  }
-
-  grouping ospfv3-router-flags {
-    leaf router-flags {
-      type bits {
-        bit V {
-          description
-            "When set, the router is an endpoint of one or
-             more virtual links.";
-        }
-        bit E {
-          description
-            "When set, the router is an AS Boundary Router
-             (ASBR).";
-        }
-        bit B {
-          description
-            "When set, the router is an Area Border
-             Router (ABR).";
-        }
-        bit Nt {
-          description
-            "When set, the router is an NSSA border router
-             that is unconditionally translating NSSA LSAs
-             into AS-external LSAs.";
-        }
-      }
-      description "Router LSA flags";
-    }
-    description "OSPFv3 Router flags grouping";
-  }
-
   grouping ospfv3-lsa-prefix {
     description
       "OSPFv3 LSA prefix";
@@ -456,8 +390,8 @@ module ietf-ospfv3-extended-lsa {
         description "Only valid for OSPFv3 Extended-Router LSAs";
       }
       description "OSPv3 Extended Router LSA";
-      uses ospfv3-router-flags;
-      uses ospfv3-lsa-options;
+      uses ospf:ospf-router-lsa-flags;
+      uses ospf:ospfv3-lsa-options;
 
       list e-router-tlvs {
         description "E-Router LSA TLVs";
@@ -518,7 +452,7 @@ module ietf-ospfv3-extended-lsa {
           "Only applies to E-Network LSAs.";
       }
       description "Extended Network LSA";
-      uses ospfv3-lsa-options;
+      uses ospf:ospfv3-lsa-options;
       list e-network-tlvs {
         description "E-Network LSA TLVs";
         container generic--tlv {
@@ -621,8 +555,8 @@ module ietf-ospfv3-extended-lsa {
               "Inter-Area-Router TLV Length - Variable dependent
                on sub-TLVs";
           }
-          uses ospfv3-router-flags;
-          uses ospfv3-lsa-options;
+          uses ospf:ospf-router-lsa-flags;
+          uses ospf:ospfv3-lsa-options;
           leaf metric {
             type rt-types:uint24;
               description "Inter-Area Router Metric";
@@ -687,7 +621,7 @@ module ietf-ospfv3-extended-lsa {
         type uint8;
         description "Router Priority for the interface.";
       }
-      uses ospfv3-lsa-options;
+      uses ospf:ospfv3-lsa-options;
       list e-link-tlvs {
         description "E-Link LSA TLVs";
         container generic-tlv {
