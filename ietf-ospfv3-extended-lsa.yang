@@ -58,7 +58,7 @@ module ietf-ospfv3-extended-lsa {
 
   reference "RFC XXXX";
 
-  revision 2018-04-18 {
+  revision 2018-06-27 {
     description
       "Initial revision.";
     reference
@@ -221,7 +221,7 @@ module ietf-ospfv3-extended-lsa {
 
   grouping unknown-sub-tlv {
     description
-      "Unknown TLV grouping"; 
+      "Unknown TLV grouping";
     container unknown-sub-tlv {
       uses ospf:tlv;
       description "Unknown External TLV Sub-TLV";
