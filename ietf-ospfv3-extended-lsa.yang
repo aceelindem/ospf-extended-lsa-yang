@@ -58,7 +58,7 @@ module ietf-ospfv3-extended-lsa {
 
   reference "RFC XXXX";
 
-  revision 2018-06-27 {
+  revision 2018-10-22 {
     description
       "Initial revision.";
     reference
@@ -471,7 +471,7 @@ module ietf-ospfv3-extended-lsa {
   grouping ospfv3-e-lsa-body {
     description "OSPFv3 Extended LSA body.";
     container e-router {
-      when  "derived-from(../header/type, "
+      when  "derived-from(../../ospf:header/ospf:type, "
         + "'ospfv3-e-router-lsa')" {
         description "Only valid for OSPFv3 Extended-Router LSAs";
       }
@@ -530,7 +530,7 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-network {
-      when "derived-from(../../header/type, "
+      when "derived-from(../../ospf:header/ospf:type, "
          + "'ospfv3-e-network-lsa')" {
         description
           "Only applies to E-Network LSAs.";
@@ -570,7 +570,7 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-inter-area-prefix {
-      when "derived-from(../../header/type, "
+      when "derived-from(../../ospf:header/ospf:type, "
          + "'ospfv3-e-inter-area-prefix-lsa')" {
         description
           "Only applies to E-Inter-Area-Prefix LSAs.";
@@ -610,7 +610,7 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-inter-area-router {
-      when "derived-from(../../header/type, "
+      when "derived-from(../../ospf:header/ospf:type, "
          + "'ospfv3-e-inter-area-router-lsa')" {
         description
           "Only applies to E-Inter-Area-Router LSAs.";
@@ -655,7 +655,7 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-as-external {
-      when "derived-from-or-self(../../header/type, "
+      when "derived-from-or-self(../../ospf:header/ospf:type, "
          + "'ospfv3-e-as-external-lsa')" {
         description
           "Only applies to E-AS-external LSAs.";
@@ -672,7 +672,7 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-nssa {
-      when "derived-from-or-self(../../header/type, "
+      when "derived-from-or-self(../../ospf:header/ospf:type, "
          + "'ospfv3-e-nssa-lsa')" {
         description
           "Only applies to E-NSSA LSAs.";
@@ -689,7 +689,7 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-link {
-      when "derived-from-or-self(../../header/type, "
+      when "derived-from-or-self(../../ospf:header/ospf:type, "
          + "'ospfv3-e-link-lsa')" {
         description
           "Only applies to Extended Link LSAs.";
@@ -713,7 +713,7 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-intra-area-prefix {
-      when "derived-from-or-self(../../header/type, "
+      when "derived-from-or-self(../../ospf:header/ospf:type, "
          + "'ospfv3-e-intra-area-prefix-lsa')" {
         description
           "Only applies to E-Intra-Area-Prefix LSAs.";
@@ -747,7 +747,8 @@ module ietf-ospfv3-extended-lsa {
   /* Configuration */
   augment "/rt:routing/rt:control-plane-protocols"
         + "/rt:control-plane-protocol/ospf:ospf" {
-    when "../rt:type = 'ospf:ospfv3'"  {
+     when "/rt:routing/rt:control-plane-protocols"
+        + "/rt:control-plane-protocol/rt:type = 'ospf:ospfv3'"  {
       description
         "This augments the OSPFv3 routing protocol when used.";
     }
@@ -766,7 +767,7 @@ module ietf-ospfv3-extended-lsa {
 
   augment "/rt:routing/rt:control-plane-protocols/"
     + "rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area" {
-    when "../../../../../rt:type = 'ospf:ospfv3'" {
+    when "'ospf:../../../../../rt:type' = 'ospf:ospfv3'" {
       description
         "This augments the OSPFv3 area configuration
          when used.";
@@ -793,8 +794,8 @@ module ietf-ospfv3-extended-lsa {
     + "ospf:link-scope-lsa-type/ospf:link-scope-lsas/"
     + "ospf:link-scope-lsa/ospf:version/ospf:ospfv3/"
     + "ospf:ospfv3/ospf:body" {
-    when "../../../../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv3'" {
+    when "/rt:routing/rt:control-plane-protocols"
+        + "/rt:control-plane-protocol/rt:type = 'ospf:ospfv3'"  {
       description
         "This augmentation is only valid for OSPFv3.";
     }
@@ -825,8 +826,8 @@ module ietf-ospfv3-extended-lsa {
     + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
     + "ospf:as-scope-lsa/ospf:version/ospf:ospfv3/"
     + "ospf:ospfv3/ospf:body" {
-    when "../../../../../../../../../"
-      + "rt:type = 'ospf:ospfv3'" {
+    when "'ospf:../../../../../../../../../"
+      + "rt:type' = 'ospf:ospfv3'" {
       description
         "This augmentation is only valid for OSPFv3.";
     }
