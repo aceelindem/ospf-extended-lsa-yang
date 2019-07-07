@@ -77,7 +77,7 @@
       </address>
     </author>
     <author fullname="Yingzhen Qu" initials="Y" surname="Qu">
-      <organization>Huawei</organization>
+      <organization>Futurewei</organization>
       <address>
         <postal>
           <street>2330 Central Expressway</street>
@@ -87,7 +87,7 @@
           <country>USA</country>
         </postal>
         <phone></phone>
-        <email>yingzhen.qu@huawei.com</email>
+        <email>yingzhen.qu@futurewei.com</email>
       </address>
     </author>
     <date/>
@@ -167,415 +167,375 @@
    Extended LSAs to the Link State Database (LSDB) operational state.</t>
     <figure align="left">
       <artwork align="left">     
-augment /rt:routing/rt:control-plane-protocols
-         /rt:control-plane-protocol/ospf:ospf:
- +--rw extended-lsa-support?   boolean {extended-lsa-support}?
-augment /rt:routing/rt:control-plane-protocols
-         /rt:control-plane-protocol/ospf:ospf/ospf:areas
-         /ospf:area:
- +--rw extended-lsa-support?   boolean {extended-lsa-support}?
-augment /rt:routing/rt:control-plane-protocols
-         /rt:control-plane-protocol/ospf:ospf/ospf:areas
-         /ospf:area/ospf:interfaces/ospf:interface/ospf:database
-         /ospf:link-scope-lsa-type/ospf:link-scope-lsas
-         /ospf:link-scope-lsa/ospf:version/ospf:ospfv3
-         /ospf:ospfv3/ospf:body:
-augment /rt:routing/rt:control-plane-protocols
-         /rt:control-plane-protocol/ospf:ospf/ospf:areas
-         /ospf:area/ospf:database/ospf:area-scope-lsa-type
-         /ospf:area-scope-lsas/ospf:area-scope-lsa/ospf:version
-         /ospf:ospfv3/ospf:ospfv3/ospf:body:
- +--ro e-router
- |  +--ro flags?           bits
- |  +--ro options          bits
- |  +--ro e-router-tlvs* []
- |     +--ro unknown-tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro link-tlv
- |        +--ro link-tlv-type?           identityref
- |        +--ro link-tlv-length?         uint16
- |        +--ro interface-id?            uint32
- |        +--ro neighbor-interface-id?   uint32
- |        +--ro neighbor-router-id?      rt-types:router-id
- |        +--ro type?                    uint8
- |        +--ro metric?                  uint16
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |              +--ro type?     uint16
- |              +--ro length?   uint16
- |              +--ro value?    yang:hex-string
- +--ro e-network
- |  +--ro options           bits
- |  +--ro e-network-tlvs* []
- |     +--ro unknown--tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro attached-router-tlv
- |        +--ro attached-router-tlv-type?      identityref
- |        +--ro attached-router-tlv-length?    uint16
- |        +--ro Adjacent-neighbor-router-id?   rt-types:router-id
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |              +--ro type?     uint16
- |              +--ro length?   uint16
- |              +--ro value?    yang:hex-string
- +--ro e-inter-area-prefix
- |  +--ro e-inter-prefix-tlvs* []
- |     +--ro unknown--tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro inter-prefix-tlv
- |        +--ro inter-prefix-tlv-type?     identityref
- |        +--ro inter-prefix-tlv-length?   uint16
- |        +--ro metric?                    rt-types:uint24
- |        +--ro prefix?                    inet:ip-prefix
- |        +--ro prefix-options?            bits
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |              +--ro type?     uint16
- |              +--ro length?   uint16
- |              +--ro value?    yang:hex-string
- +--ro e-inter-area-router
- |  +--ro e-inter-router-tlvs* []
- |     +--ro unknown-tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro inter-router-tlv
- |        +--ro inter-routerx-tlv-type?    identityref
- |        +--ro inter-router-tlv-length?   uint16
- |        +--ro flags?                     bits
- |        +--ro options                    bits
- |        +--ro metric?                    rt-types:uint24
- |        +--ro destination-router-id?     rt-types:router-id
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |              +--ro type?     uint16
- |              +--ro length?   uint16
- |              +--ro value?    yang:hex-string
- +--ro e-as-external
- |  +--ro e-external-tlvs* []
- |     +--ro unknown-tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro external-prefix-tlv
- |        +--ro external-prefix-tlv-type?     identityref
- |        +--ro external-prefix-tlv-length?   uint16
- |        +--ro flags?                        bits
- |        +--ro metric?                       rt-types:uint24
- |        +--ro prefix?                       inet:ip-prefix
- |        +--ro prefix-options?               bits
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |           |  +--ro type?     uint16
- |           |  +--ro length?   uint16
- |           |  +--ro value?    yang:hex-string
- |           +--ro ipv6-fwd-addr-sub-tlv
- |           |  +--ro ipv6-fwd-addr-sub-tlv-type?     identityref
- |           |  +--ro ipv6-fwd-addr-sub-tlv-length?   uint16
- |           |  +--ro forwarding-address?
- |           |          inet:ipv6-address
- |           +--ro ipv4-fwd-addr-sub-tlv
- |           |  +--ro ipv4-fwd-addr-sub-tlv-type?     identityref
- |           |  +--ro ipv4-fwd-addr-sub-tlv-length?   uint16
- |           |  +--ro forwarding-address?
- |           |          inet:ipv4-address
- |           +--ro route-tag-sub-tlv
- |              +--ro route-tag-sub-tlv-type?     identityref
- |              +--ro route-tag-sub-tlv-length?   uint16
- |              +--ro route-tag?                  uint32
- +--ro e-nssa
- |  +--ro e-external-tlvs* []
- |     +--ro unknown-tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro external-prefix-tlv
- |        +--ro external-prefix-tlv-type?     identityref
- |        +--ro external-prefix-tlv-length?   uint16
- |        +--ro flags?                        bits
- |        +--ro metric?                       rt-types:uint24
- |        +--ro prefix?                       inet:ip-prefix
- |        +--ro prefix-options?               bits
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |           |  +--ro type?     uint16
- |           |  +--ro length?   uint16
- |           |  +--ro value?    yang:hex-string
- |           +--ro ipv6-fwd-addr-sub-tlv
- |           |  +--ro ipv6-fwd-addr-sub-tlv-type?     identityref
- |           |  +--ro ipv6-fwd-addr-sub-tlv-length?   uint16
- |           |  +--ro forwarding-address?
- |           |          inet:ipv6-address
- |           +--ro ipv4-fwd-addr-sub-tlv
- |           |  +--ro ipv4-fwd-addr-sub-tlv-type?     identityref
- |           |  +--ro ipv4-fwd-addr-sub-tlv-length?   uint16
- |           |  +--ro forwarding-address?
- |           |          inet:ipv4-address
- |           +--ro route-tag-sub-tlv
- |              +--ro route-tag-sub-tlv-type?     identityref
- |              +--ro route-tag-sub-tlv-length?   uint16
- |              +--ro route-tag?                  uint32
- +--ro e-link
- |  +--ro rtr-priority?   uint8
- |  +--ro options         bits
- |  +--ro e-link-tlvs* []
- |     +--ro unknown-tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro intra-prefix-tlv
- |     |  +--ro intra-prefix-tlv-type?     identityref
- |     |  +--ro intra-prefix-tlv-length?   uint16
- |     |  +--ro metric?                    rt-types:uint24
- |     |  +--ro prefix?                    inet:ip-prefix
- |     |  +--ro prefix-options?            bits
- |     |  +--ro sub-tlvs* []
- |     |     +--ro unknown-sub-tlv
- |     |        +--ro type?     uint16
- |     |        +--ro length?   uint16
- |     |        +--ro value?    yang:hex-string
- |     +--ro ipv6-link-local-tlv
- |     |  +--ro ipv6-link-local-tlv-type?     identityref
- |     |  +--ro ipv6-link-local-tlv-length?   uint16
- |     |  +--ro link-local-address?           inet:ipv6-address
- |     |  +--ro sub-tlvs* []
- |     |     +--ro unknown-sub-tlv
- |     |        +--ro type?     uint16
- |     |        +--ro length?   uint16
- |     |        +--ro value?    yang:hex-string
- |     +--ro ipv4-link-local-tlv
- |        +--ro ipv4-link-local-tlv-type?     identityref
- |        +--ro ipv4-link-local-tlv-length?   uint16
- |        +--ro link-local-address?           inet:ipv4-address
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |              +--ro type?     uint16
- |              +--ro length?   uint16
- |              +--ro value?    yang:hex-string
- +--ro e-intra-area-prefix
-    +--ro referenced-ls-type?         uint16
-    +--ro referenced-link-state-id?   uint32
-    +--ro referenced-adv-router?      rt-types:router-id
-    +--ro e-intra-prefix-tlvs* []
-       +--ro unknown-tlv
-       |  +--ro type?     uint16
-       |  +--ro length?   uint16
-       |  +--ro value?    yang:hex-string
-       +--ro intra-prefix-tlv
-          +--ro intra-prefix-tlv-type?     identityref
-          +--ro intra-prefix-tlv-length?   uint16
-          +--ro metric?                    rt-types:uint24
-          +--ro prefix?                    inet:ip-prefix
-          +--ro prefix-options?            bits
-          +--ro sub-tlvs* []
-             +--ro unknown-sub-tlv
-                +--ro type?     uint16
-                +--ro length?   uint16
-                +--ro value?    yang:hex-string
-augment /rt:routing/rt:control-plane-protocols
-         /rt:control-plane-protocol/ospf:ospf/ospf:database
-         /ospf:as-scope-lsa-type/ospf:as-scope-lsas
-         /ospf:as-scope-lsa/ospf:version/ospf:ospfv3/ospf:ospfv3
-         /ospf:body:
- +--ro e-router
- |  +--ro flags?           bits
- |  +--ro options          bits
- |  +--ro e-router-tlvs* []
- |     +--ro unknown-tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro link-tlv
- |        +--ro link-tlv-type?           identityref
- |        +--ro link-tlv-length?         uint16
- |        +--ro interface-id?            uint32
- |        +--ro neighbor-interface-id?   uint32
- |        +--ro neighbor-router-id?      rt-types:router-id
- |        +--ro type?                    uint8
- |        +--ro metric?                  uint16
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |              +--ro type?     uint16
- |              +--ro length?   uint16
- |              +--ro value?    yang:hex-string
- +--ro e-network
- |  +--ro options           bits
- |  +--ro e-network-tlvs* []
- |     +--ro unknown--tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro attached-router-tlv
- |        +--ro attached-router-tlv-type?      identityref
- |        +--ro attached-router-tlv-length?    uint16
- |        +--ro Adjacent-neighbor-router-id?   rt-types:router-id
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |              +--ro type?     uint16
- |              +--ro length?   uint16
- |              +--ro value?    yang:hex-string
- +--ro e-inter-area-prefix
- |  +--ro e-inter-prefix-tlvs* []
- |     +--ro unknown--tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro inter-prefix-tlv
- |        +--ro inter-prefix-tlv-type?     identityref
- |        +--ro inter-prefix-tlv-length?   uint16
- |        +--ro metric?                    rt-types:uint24
- |        +--ro prefix?                    inet:ip-prefix
- |        +--ro prefix-options?            bits
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |              +--ro type?     uint16
- |              +--ro length?   uint16
- |              +--ro value?    yang:hex-string
- +--ro e-inter-area-router
- |  +--ro e-inter-router-tlvs* []
- |     +--ro unknown-tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro inter-router-tlv
- |        +--ro inter-routerx-tlv-type?    identityref
- |        +--ro inter-router-tlv-length?   uint16
- |        +--ro flags?                     bits
- |        +--ro options                    bits
- |        +--ro metric?                    rt-types:uint24
- |        +--ro destination-router-id?     rt-types:router-id
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |              +--ro type?     uint16
- |              +--ro length?   uint16
- |              +--ro value?    yang:hex-string
- +--ro e-as-external
- |  +--ro e-external-tlvs* []
- |     +--ro unknown-tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro external-prefix-tlv
- |        +--ro external-prefix-tlv-type?     identityref
- |        +--ro external-prefix-tlv-length?   uint16
- |        +--ro flags?                        bits
- |        +--ro metric?                       rt-types:uint24
- |        +--ro prefix?                       inet:ip-prefix
- |        +--ro prefix-options?               bits
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |           |  +--ro type?     uint16
- |           |  +--ro length?   uint16
- |           |  +--ro value?    yang:hex-string
- |           +--ro ipv6-fwd-addr-sub-tlv
- |           |  +--ro ipv6-fwd-addr-sub-tlv-type?     identityref
- |           |  +--ro ipv6-fwd-addr-sub-tlv-length?   uint16
- |           |  +--ro forwarding-address?
- |           |          inet:ipv6-address
- |           +--ro ipv4-fwd-addr-sub-tlv
- |           |  +--ro ipv4-fwd-addr-sub-tlv-type?     identityref
- |           |  +--ro ipv4-fwd-addr-sub-tlv-length?   uint16
- |           |  +--ro forwarding-address?
- |           |          inet:ipv4-address
- |           +--ro route-tag-sub-tlv
- |              +--ro route-tag-sub-tlv-type?     identityref
- |              +--ro route-tag-sub-tlv-length?   uint16
- |              +--ro route-tag?                  uint32
- +--ro e-nssa
- |  +--ro e-external-tlvs* []
- |     +--ro unknown-tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro external-prefix-tlv
- |        +--ro external-prefix-tlv-type?     identityref
- |        +--ro external-prefix-tlv-length?   uint16
- |        +--ro flags?                        bits
- |        +--ro metric?                       rt-types:uint24
- |        +--ro prefix?                       inet:ip-prefix
- |        +--ro prefix-options?               bits
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |           |  +--ro type?     uint16
- |           |  +--ro length?   uint16
- |           |  +--ro value?    yang:hex-string
- |           +--ro ipv6-fwd-addr-sub-tlv
- |           |  +--ro ipv6-fwd-addr-sub-tlv-type?     identityref
- |           |  +--ro ipv6-fwd-addr-sub-tlv-length?   uint16
- |           |  +--ro forwarding-address?
- |           |          inet:ipv6-address
- |           +--ro ipv4-fwd-addr-sub-tlv
- |           |  +--ro ipv4-fwd-addr-sub-tlv-type?     identityref
- |           |  +--ro ipv4-fwd-addr-sub-tlv-length?   uint16
- |           |  +--ro forwarding-address?
- |           |          inet:ipv4-address
- |           +--ro route-tag-sub-tlv
- |              +--ro route-tag-sub-tlv-type?     identityref
- |              +--ro route-tag-sub-tlv-length?   uint16
- |              +--ro route-tag?                  uint32
- +--ro e-link
- |  +--ro rtr-priority?   uint8
- |  +--ro options         bits
- |  +--ro e-link-tlvs* []
- |     +--ro unknown-tlv
- |     |  +--ro type?     uint16
- |     |  +--ro length?   uint16
- |     |  +--ro value?    yang:hex-string
- |     +--ro intra-prefix-tlv
- |     |  +--ro intra-prefix-tlv-type?     identityref
- |     |  +--ro intra-prefix-tlv-length?   uint16
- |     |  +--ro metric?                    rt-types:uint24
- |     |  +--ro prefix?                    inet:ip-prefix
- |     |  +--ro prefix-options?            bits
- |     |  +--ro sub-tlvs* []
- |     |     +--ro unknown-sub-tlv
- |     |        +--ro type?     uint16
- |     |        +--ro length?   uint16
- |     |        +--ro value?    yang:hex-string
- |     +--ro ipv6-link-local-tlv
- |     |  +--ro ipv6-link-local-tlv-type?     identityref
- |     |  +--ro ipv6-link-local-tlv-length?   uint16
- |     |  +--ro link-local-address?           inet:ipv6-address
- |     |  +--ro sub-tlvs* []
- |     |     +--ro unknown-sub-tlv
- |     |        +--ro type?     uint16
- |     |        +--ro length?   uint16
- |     |        +--ro value?    yang:hex-string
- |     +--ro ipv4-link-local-tlv
- |        +--ro ipv4-link-local-tlv-type?     identityref
- |        +--ro ipv4-link-local-tlv-length?   uint16
- |        +--ro link-local-address?           inet:ipv4-address
- |        +--ro sub-tlvs* []
- |           +--ro unknown-sub-tlv
- |              +--ro type?     uint16
- |              +--ro length?   uint16
- |              +--ro value?    yang:hex-string
- +--ro e-intra-area-prefix
-    +--ro referenced-ls-type?         uint16
-    +--ro referenced-link-state-id?   uint32
-    +--ro referenced-adv-router?      rt-types:router-id
-    +--ro e-intra-prefix-tlvs* []
-       +--ro unknown-tlv
-       |  +--ro type?     uint16
-       |  +--ro length?   uint16
-       |  +--ro value?    yang:hex-string
-       +--ro intra-prefix-tlv
-          +--ro intra-prefix-tlv-type?     identityref
-          +--ro intra-prefix-tlv-length?   uint16
-          +--ro metric?                    rt-types:uint24
-          +--ro prefix?                    inet:ip-prefix
-          +--ro prefix-options?            bits
-          +--ro sub-tlvs* []
-             +--ro unknown-sub-tlv
-                +--ro type?     uint16
-                +--ro length?   uint16
-                +--ro value?    yang:hex-string
+module: ietf-ospfv3-extended-lsa
+  augment /rt:routing/rt:control-plane-protocols
+          /rt:control-plane-protocol/ospf:ospf:
+    +--rw extended-lsa-support?   boolean {extended-lsa-support}?
+  augment /rt:routing/rt:control-plane-protocols
+          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area:
+    +--rw extended-lsa-support?   boolean {extended-lsa-support}?
+  augment /rt:routing/rt:control-plane-protocols
+          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+          /ospf:interfaces/ospf:interface/ospf:database
+          /ospf:link-scope-lsa-type/ospf:link-scope-lsas
+          /ospf:link-scope-lsa/ospf:version/ospf:ospfv3
+          /ospf:ospfv3/ospf:body:
+  augment /rt:routing/rt:control-plane-protocols
+          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+          /ospf:database/ospf:area-scope-lsa-type
+          /ospf:area-scope-lsas/ospf:area-scope-lsa/ospf:version
+          /ospf:ospfv3/ospf:ospfv3/ospf:body:
+    +--ro e-router
+    |  +--ro flags?           bits
+    |  +--ro options          bits
+    |  +--ro e-router-tlvs*
+    |     +--ro unknown-tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro link-tlv
+    |        +--ro link-tlv-length?         uint16
+    |        +--ro interface-id?            uint32
+    |        +--ro neighbor-interface-id?   uint32
+    |        +--ro neighbor-router-id?      rt-types:router-id
+    |        +--ro type?                    uint8
+    |        +--ro metric?                  uint16
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |              +--ro type?     uint16
+    |              +--ro length?   uint16
+    |              +--ro value?    yang:hex-string
+    +--ro e-network
+    |  +--ro options           bits
+    |  +--ro e-network-tlvs*
+    |     +--ro unknown--tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro attached-router-tlv
+    |        +--ro attached-router-tlv-length?    uint16
+    |        +--ro Adjacent-neighbor-router-id?   rt-types:router-id
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |              +--ro type?     uint16
+    |              +--ro length?   uint16
+    |              +--ro value?    yang:hex-string
+    +--ro e-inter-area-prefix
+    |  +--ro e-inter-prefix-tlvs*
+    |     +--ro unknown--tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro inter-prefix-tlv
+    |        +--ro inter-prefix-tlv-length?   uint16
+    |        +--ro metric?                    rt-types:uint24
+    |        +--ro prefix?                    inet:ip-prefix
+    |        +--ro prefix-options?            bits
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |              +--ro type?     uint16
+    |              +--ro length?   uint16
+    |              +--ro value?    yang:hex-string
+    +--ro e-inter-area-router
+    |  +--ro e-inter-router-tlvs*
+    |     +--ro unknown-tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro inter-router-tlv
+    |        +--ro inter-router-tlv-length?   uint16
+    |        +--ro flags?                     bits
+    |        +--ro options                    bits
+    |        +--ro metric?                    rt-types:uint24
+    |        +--ro destination-router-id?     rt-types:router-id
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |              +--ro type?     uint16
+    |              +--ro length?   uint16
+    |              +--ro value?    yang:hex-string
+    +--ro e-as-external
+    |  +--ro e-external-tlvs*
+    |     +--ro unknown-tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro external-prefix-tlv
+    |        +--ro external-prefix-tlv-length?   uint16
+    |        +--ro flags?                        bits
+    |        +--ro metric?                       rt-types:uint24
+    |        +--ro prefix?                       inet:ip-prefix
+    |        +--ro prefix-options?               bits
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |           |  +--ro type?     uint16
+    |           |  +--ro length?   uint16
+    |           |  +--ro value?    yang:hex-string
+    |           +--ro ipv6-fwd-addr-sub-tlv
+    |           |  +--ro ipv6-fwd-addr-sub-tlv-length?   uint16
+    |           |  +--ro forwarding-address?             inet:ipv6-address
+    |           +--ro ipv4-fwd-addr-sub-tlv
+    |           |  +--ro ipv4-fwd-addr-sub-tlv-length?   uint16
+    |           |  +--ro forwarding-address?             inet:ipv4-address
+    |           +--ro route-tag-sub-tlv
+    |              +--ro route-tag-sub-tlv-length?   uint16
+    |              +--ro route-tag?                  uint32
+    +--ro e-nssa
+    |  +--ro e-external-tlvs*
+    |     +--ro unknown-tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro external-prefix-tlv
+    |        +--ro external-prefix-tlv-length?   uint16
+    |        +--ro flags?                        bits
+    |        +--ro metric?                       rt-types:uint24
+    |        +--ro prefix?                       inet:ip-prefix
+    |        +--ro prefix-options?               bits
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |           |  +--ro type?     uint16
+    |           |  +--ro length?   uint16
+    |           |  +--ro value?    yang:hex-string
+    |           +--ro ipv6-fwd-addr-sub-tlv
+    |           |  +--ro ipv6-fwd-addr-sub-tlv-length?   uint16
+    |           |  +--ro forwarding-address?             inet:ipv6-address
+    |           +--ro ipv4-fwd-addr-sub-tlv
+    |           |  +--ro ipv4-fwd-addr-sub-tlv-length?   uint16
+    |           |  +--ro forwarding-address?             inet:ipv4-address
+    |           +--ro route-tag-sub-tlv
+    |              +--ro route-tag-sub-tlv-length?   uint16
+    |              +--ro route-tag?                  uint32
+    +--ro e-link
+    |  +--ro rtr-priority?   uint8
+    |  +--ro options         bits
+    |  +--ro e-link-tlvs*
+    |     +--ro unknown-tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro intra-prefix-tlv
+    |     |  +--ro intra-prefix-tlv-length?   uint16
+    |     |  +--ro metric?                    rt-types:uint24
+    |     |  +--ro prefix?                    inet:ip-prefix
+    |     |  +--ro prefix-options?            bits
+    |     |  +--ro sub-tlvs*
+    |     |     +--ro unknown-sub-tlv
+    |     |        +--ro type?     uint16
+    |     |        +--ro length?   uint16
+    |     |        +--ro value?    yang:hex-string
+    |     +--ro ipv6-link-local-tlv
+    |     |  +--ro ipv6-link-local-tlv-length?   uint16
+    |     |  +--ro link-local-address?           inet:ipv6-address
+    |     |  +--ro sub-tlvs*
+    |     |     +--ro unknown-sub-tlv
+    |     |        +--ro type?     uint16
+    |     |        +--ro length?   uint16
+    |     |        +--ro value?    yang:hex-string
+    |     +--ro ipv4-link-local-tlv
+    |        +--ro ipv4-link-local-tlv-length?   uint16
+    |        +--ro link-local-address?           inet:ipv4-address
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |              +--ro type?     uint16
+    |              +--ro length?   uint16
+    |              +--ro value?    yang:hex-string
+    +--ro e-intra-area-prefix
+       +--ro referenced-ls-type?         uint16
+       +--ro referenced-link-state-id?   uint32
+       +--ro referenced-adv-router?      rt-types:router-id
+       +--ro e-intra-prefix-tlvs*
+          +--ro unknown-tlv
+          |  +--ro type?     uint16
+          |  +--ro length?   uint16
+          |  +--ro value?    yang:hex-string
+          +--ro intra-prefix-tlv
+             +--ro intra-prefix-tlv-length?   uint16
+             +--ro metric?                    rt-types:uint24
+             +--ro prefix?                    inet:ip-prefix
+             +--ro prefix-options?            bits
+             +--ro sub-tlvs*
+                +--ro unknown-sub-tlv
+                   +--ro type?     uint16
+                   +--ro length?   uint16
+                   +--ro value?    yang:hex-string
+  augment /rt:routing/rt:control-plane-protocols
+          /rt:control-plane-protocol/ospf:ospf/ospf:database
+          /ospf:as-scope-lsa-type/ospf:as-scope-lsas
+          /ospf:as-scope-lsa/ospf:version/ospf:ospfv3
+          /ospf:ospfv3/ospf:body:
+    +--ro e-router
+    |  +--ro flags?           bits
+    |  +--ro options          bits
+    |  +--ro e-router-tlvs*
+    |     +--ro unknown-tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro link-tlv
+    |        +--ro link-tlv-length?         uint16
+    |        +--ro interface-id?            uint32
+    |        +--ro neighbor-interface-id?   uint32
+    |        +--ro neighbor-router-id?      rt-types:router-id
+    |        +--ro type?                    uint8
+    |        +--ro metric?                  uint16
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |              +--ro type?     uint16
+    |              +--ro length?   uint16
+    |              +--ro value?    yang:hex-string
+    +--ro e-network
+    |  +--ro options           bits
+    |  +--ro e-network-tlvs*
+    |     +--ro unknown--tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro attached-router-tlv
+    |        +--ro attached-router-tlv-length?    uint16
+    |        +--ro Adjacent-neighbor-router-id?   rt-types:router-id
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |              +--ro type?     uint16
+    |              +--ro length?   uint16
+    |              +--ro value?    yang:hex-string
+    +--ro e-inter-area-prefix
+    |  +--ro e-inter-prefix-tlvs*
+    |     +--ro unknown--tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro inter-prefix-tlv
+    |        +--ro inter-prefix-tlv-length?   uint16
+    |        +--ro metric?                    rt-types:uint24
+    |        +--ro prefix?                    inet:ip-prefix
+    |        +--ro prefix-options?            bits
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |              +--ro type?     uint16
+    |              +--ro length?   uint16
+    |              +--ro value?    yang:hex-string
+    +--ro e-inter-area-router
+    |  +--ro e-inter-router-tlvs*
+    |     +--ro unknown-tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro inter-router-tlv
+    |        +--ro inter-router-tlv-length?   uint16
+    |        +--ro flags?                     bits
+    |        +--ro options                    bits
+    |        +--ro metric?                    rt-types:uint24
+    |        +--ro destination-router-id?     rt-types:router-id
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |              +--ro type?     uint16
+    |              +--ro length?   uint16
+    |              +--ro value?    yang:hex-string
+    +--ro e-as-external
+    |  +--ro e-external-tlvs*
+    |     +--ro unknown-tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro external-prefix-tlv
+    |        +--ro external-prefix-tlv-length?   uint16
+    |        +--ro flags?                        bits
+    |        +--ro metric?                       rt-types:uint24
+    |        +--ro prefix?                       inet:ip-prefix
+    |        +--ro prefix-options?               bits
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |           |  +--ro type?     uint16
+    |           |  +--ro length?   uint16
+    |           |  +--ro value?    yang:hex-string
+    |           +--ro ipv6-fwd-addr-sub-tlv
+    |           |  +--ro ipv6-fwd-addr-sub-tlv-length?   uint16
+    |           |  +--ro forwarding-address?             inet:ipv6-address
+    |           +--ro ipv4-fwd-addr-sub-tlv
+    |           |  +--ro ipv4-fwd-addr-sub-tlv-length?   uint16
+    |           |  +--ro forwarding-address?             inet:ipv4-address
+    |           +--ro route-tag-sub-tlv
+    |              +--ro route-tag-sub-tlv-length?   uint16
+    |              +--ro route-tag?                  uint32
+    +--ro e-nssa
+    |  +--ro e-external-tlvs*
+    |     +--ro unknown-tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro external-prefix-tlv
+    |        +--ro external-prefix-tlv-length?   uint16
+    |        +--ro flags?                        bits
+    |        +--ro metric?                       rt-types:uint24
+    |        +--ro prefix?                       inet:ip-prefix
+    |        +--ro prefix-options?               bits
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |           |  +--ro type?     uint16
+    |           |  +--ro length?   uint16
+    |           |  +--ro value?    yang:hex-string
+    |           +--ro ipv6-fwd-addr-sub-tlv
+    |           |  +--ro ipv6-fwd-addr-sub-tlv-length?   uint16
+    |           |  +--ro forwarding-address?             inet:ipv6-address
+    |           +--ro ipv4-fwd-addr-sub-tlv
+    |           |  +--ro ipv4-fwd-addr-sub-tlv-length?   uint16
+    |           |  +--ro forwarding-address?             inet:ipv4-address
+    |           +--ro route-tag-sub-tlv
+    |              +--ro route-tag-sub-tlv-length?   uint16
+    |              +--ro route-tag?                  uint32
+    +--ro e-link
+    |  +--ro rtr-priority?   uint8
+    |  +--ro options         bits
+    |  +--ro e-link-tlvs*
+    |     +--ro unknown-tlv
+    |     |  +--ro type?     uint16
+    |     |  +--ro length?   uint16
+    |     |  +--ro value?    yang:hex-string
+    |     +--ro intra-prefix-tlv
+    |     |  +--ro intra-prefix-tlv-length?   uint16
+    |     |  +--ro metric?                    rt-types:uint24
+    |     |  +--ro prefix?                    inet:ip-prefix
+    |     |  +--ro prefix-options?            bits
+    |     |  +--ro sub-tlvs*
+    |     |     +--ro unknown-sub-tlv
+    |     |        +--ro type?     uint16
+    |     |        +--ro length?   uint16
+    |     |        +--ro value?    yang:hex-string
+    |     +--ro ipv6-link-local-tlv
+    |     |  +--ro ipv6-link-local-tlv-length?   uint16
+    |     |  +--ro link-local-address?           inet:ipv6-address
+    |     |  +--ro sub-tlvs*
+    |     |     +--ro unknown-sub-tlv
+    |     |        +--ro type?     uint16
+    |     |        +--ro length?   uint16
+    |     |        +--ro value?    yang:hex-string
+    |     +--ro ipv4-link-local-tlv
+    |        +--ro ipv4-link-local-tlv-length?   uint16
+    |        +--ro link-local-address?           inet:ipv4-address
+    |        +--ro sub-tlvs*
+    |           +--ro unknown-sub-tlv
+    |              +--ro type?     uint16
+    |              +--ro length?   uint16
+    |              +--ro value?    yang:hex-string
+    +--ro e-intra-area-prefix
+       +--ro referenced-ls-type?         uint16
+       +--ro referenced-link-state-id?   uint32
+       +--ro referenced-adv-router?      rt-types:router-id
+       +--ro e-intra-prefix-tlvs*
+          +--ro unknown-tlv
+          |  +--ro type?     uint16
+          |  +--ro length?   uint16
+          |  +--ro value?    yang:hex-string
+          +--ro intra-prefix-tlv
+             +--ro intra-prefix-tlv-length?   uint16
+             +--ro metric?                    rt-types:uint24
+             +--ro prefix?                    inet:ip-prefix
+             +--ro prefix-options?            bits
+             +--ro sub-tlvs*
+                +--ro unknown-sub-tlv
+                   +--ro type?     uint16
+                   +--ro length?   uint16
+                   +--ro value?    yang:hex-string
       </artwork>
     </figure>         
   </section>
@@ -585,7 +545,7 @@ augment /rt:routing/rt:control-plane-protocols
   <t>
     <figure>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2018-10-22.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2019-07-05.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace
@@ -615,23 +575,25 @@ module ietf-ospfv3-extended-lsa {
   }
 
   organization
-    "IETF OSPF - OSPF Working Group";
+    "IETF LSR - Link State Routing Working Group";
 
   contact
-     "WG Web:   <http://tools.ietf.org/wg/ospf/>
-      WG List:  <mailto:ospf@ietf.org>
+     "WG Web:   <http://tools.ietf.org/wg/lsr/>
+      WG List:  <mailto:lsr@ietf.org>
 
       Author:   Acee Lindem
                 <mailto:acee@cisco.com>
       Author:   Sharmila Palani
-                <mailto:shpalani@cisco.com>";
+                <mailto:shpalani@cisco.com>
+      Author:   Yingzhen Qu
+                <mailto:yingzhen.qu@futurewei.com>";
 
   description
     "This YANG module defines the configuration
      and operational state for OSPFv3 Extended LSAs, which is
      common across all of the vendor implementations.
 
-     Copyright (c) 2018 IETF Trust and the persons identified as
+     Copyright (c) 2019 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -645,8 +607,7 @@ module ietf-ospfv3-extended-lsa {
      see the RFC itself for full legal notices.";
 
   reference "RFC XXXX";
-
-  revision 2018-10-22 {
+  revision 2019-07-05 {
     description
       "Initial revision.";
     reference
@@ -725,88 +686,7 @@ module ietf-ospfv3-extended-lsa {
       "OSPFv3 Extended Intra-area Prefix LSA - Type 0xA029";
   }
 
-  /*
-   * OSPFv3 Extended LSA TLV Type Identities
-   */
-  identity ospfv3-e-lsa-tlv-type {
-    description
-      "Base identity for OSPFv3 LSA TLV Types";
-  }
-
-  identity ospfv3-e-lsa-router-link-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA Router-Link TLV";
-  }
-
-  identity ospfv3-e-lsa-attached-routers-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA Attached-Routers TLV";
-  }
-
-  identity ospfv3-e-lsa-inter-area-prefix-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA Inter-Area-Prefix TLV";
-  }
-
-  identity ospfv3-e-lsa-inter-area-router-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA Inter-Area-Router TLV";
-  }
-
-  identity ospfv3-e-lsa-external-prefix-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA External-Prefix TLV";
-  }
-
-  identity ospfv3-e-lsa-intra-area-prefix-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA Intra-Area-Prefix TLV";
-  }
-
-  identity ospfv3-e-lsa-ipv6-link-local-addr-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA IPv6 Link-Local Address TLV";
-  }
-
-  identity ospfv3-e-lsa-ipv4-link-local-addr-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA IPv4 Link-Local Address TLV";
-  }
-
-  /*
-   * OSPFv3 Extended LSA Sub-TLV Type Identities
-   */
-  identity ospfv3-e-lsa-sub-tlv-type {
-    description
-      "Base identity for OSPFv3 LSA Sub-TLV Types";
-  }
-
-  identity ospfv3-e-lsa-ipv6-fwd-addr-sub-tlv {
-    base ospfv3-e-lsa-sub-tlv-type;
-    description
-      "OSPFv3 Extended LSA IPv6 forwarding Address Sub-TLV";
-  }
-
-  identity ospfv3-e-lsa-ipv4-fwd-addr-sub-tlv {
-    base ospfv3-e-lsa-sub-tlv-type;
-    description
-      "OSPFv3 Extended LSA IPv4 forwarding Address Sub-TLV";
-  }
-
-  identity ospfv3-e-lsa-tag-sub-tlv {
-    base ospfv3-e-lsa-sub-tlv-type;
-    description
-      "OSPFv3 Extended LSA Tag Sub-TLV";
-  }
-
+ 
   grouping unknown-sub-tlv {
     description
       "Unknown TLV grouping";
@@ -858,12 +738,6 @@ module ietf-ospfv3-extended-lsa {
     container ipv6-fwd-addr-sub-tlv {
       description
         "IPv6 Forwarding Address Sub-TLV";
-      leaf ipv6-fwd-addr-sub-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-ipv6-fwd-addr-sub-tlv;
-        }
-        description "IPv6 Forwarding Address Sub-TLV Type - 1";
-      }
       leaf ipv6-fwd-addr-sub-tlv-length {
         type uint16;
         description
@@ -884,12 +758,6 @@ module ietf-ospfv3-extended-lsa {
     container ipv4-fwd-addr-sub-tlv {
       description
         "IPv4 Forwarding Address Sub-TLV";
-      leaf ipv4-fwd-addr-sub-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-ipv4-fwd-addr-sub-tlv;
-        }
-        description "IPv4 Forwarding Address Sub-TLV Type - 2";
-      }
       leaf ipv4-fwd-addr-sub-tlv-length {
         type uint16;
         description
@@ -910,12 +778,6 @@ module ietf-ospfv3-extended-lsa {
     container route-tag-sub-tlv {
       description
         "Route Tag Sub-TLV";
-      leaf route-tag-sub-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-tag-sub-tlv;
-        }
-        description "Route Tag Sub-TLV Type - 3";
-      }
       leaf route-tag-sub-tlv-length {
         type uint16;
         description
@@ -934,12 +796,6 @@ module ietf-ospfv3-extended-lsa {
   grouping external-prefix-tlv {
     container external-prefix-tlv {
       description "External Prefix LSA TLV";
-      leaf external-prefix-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-external-prefix-tlv;
-        }
-        description "External Prefix TLV Type - 5";
-      }
       leaf external-prefix-tlv-length {
         type uint16;
         description
@@ -975,12 +831,6 @@ module ietf-ospfv3-extended-lsa {
   grouping intra-area-prefix-tlv {
     container intra-prefix-tlv {
       description "Intra-Area Prefix LSA TLV";
-      leaf intra-prefix-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-intra-area-prefix-tlv;
-        }
-        description "Intra-Area Prefix TLV Type - 6";
-      }
       leaf intra-prefix-tlv-length {
         type uint16;
         description
@@ -1003,12 +853,6 @@ module ietf-ospfv3-extended-lsa {
   grouping ipv6-link-local-tlv {
     container ipv6-link-local-tlv {
       description "IPv6 Link-Local LSA TLV";
-      leaf ipv6-link-local-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-ipv6-link-local-addr-tlv;
-        }
-        description "IPv6 Link-Local TLV Type - 7";
-      }
       leaf ipv6-link-local-tlv-length {
         type uint16;
         description
@@ -1031,12 +875,6 @@ module ietf-ospfv3-extended-lsa {
   grouping ipv4-link-local-tlv {
     container ipv4-link-local-tlv {
       description "IPv6 Link-Local LSA TLV";
-      leaf ipv4-link-local-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-ipv4-link-local-addr-tlv;
-        }
-        description "IPv4 Link-Local TLV Type - 8";
-      }
       leaf ipv4-link-local-tlv-length {
         type uint16;
         description
@@ -1075,12 +913,6 @@ module ietf-ospfv3-extended-lsa {
         }
         container link-tlv {
           description "E-Router LSA TLV";
-          leaf link-tlv-type {
-            type identityref {
-              base ospfv3-e-lsa-router-link-tlv;
-            }
-            description "Link TLV Type - 1";
-          }
           leaf link-tlv-length {
             type uint16;
             description
@@ -1133,12 +965,6 @@ module ietf-ospfv3-extended-lsa {
         }
         container attached-router-tlv {
           description "Attached Router TLV";
-          leaf attached-router-tlv-type {
-            type identityref {
-              base ospfv3-e-lsa-attached-routers-tlv;
-            }
-            description "Attached Router TLV Type - 2";
-          }
           leaf attached-router-tlv-length {
             type uint16;
             description
@@ -1172,12 +998,6 @@ module ietf-ospfv3-extended-lsa {
         }
         container inter-prefix-tlv {
           description "Unknown E-Inter-Area-Prefix LSA TLV";
-          leaf inter-prefix-tlv-type {
-            type identityref {
-              base ospfv3-e-lsa-inter-area-prefix-tlv;
-            }
-            description "Inter-Area Prefix TLV Type - 3";
-          }
           leaf inter-prefix-tlv-length {
             type uint16;
             description
@@ -1212,12 +1032,6 @@ module ietf-ospfv3-extended-lsa {
         }
         container inter-router-tlv {
           description "Unknown E-Inter-Area-Router LSA TLV";
-          leaf inter-routerx-tlv-type {
-            type identityref {
-              base ospfv3-e-lsa-inter-area-router-tlv;
-            }
-            description "Inter-Area Router TLV Type - 4";
-          }
           leaf inter-router-tlv-length {
             type uint16;
             description

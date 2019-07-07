@@ -27,23 +27,25 @@ module ietf-ospfv3-extended-lsa {
   }
 
   organization
-    "IETF OSPF - OSPF Working Group";
+    "IETF LSR - Link State Routing Working Group";
 
   contact
-     "WG Web:   <http://tools.ietf.org/wg/ospf/>
-      WG List:  <mailto:ospf@ietf.org>
+     "WG Web:   <http://tools.ietf.org/wg/lsr/>
+      WG List:  <mailto:lsr@ietf.org>
 
       Author:   Acee Lindem
                 <mailto:acee@cisco.com>
       Author:   Sharmila Palani
-                <mailto:shpalani@cisco.com>";
+                <mailto:shpalani@cisco.com>
+      Author:   Yingzhen Qu
+                <mailto:yingzhen.qu@futurewei.com>";
 
   description
     "This YANG module defines the configuration
      and operational state for OSPFv3 Extended LSAs, which is
      common across all of the vendor implementations.
 
-     Copyright (c) 2018 IETF Trust and the persons identified as
+     Copyright (c) 2019 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -57,8 +59,7 @@ module ietf-ospfv3-extended-lsa {
      see the RFC itself for full legal notices.";
 
   reference "RFC XXXX";
-
-  revision 2018-10-22 {
+  revision 2019-07-05 {
     description
       "Initial revision.";
     reference
@@ -137,88 +138,7 @@ module ietf-ospfv3-extended-lsa {
       "OSPFv3 Extended Intra-area Prefix LSA - Type 0xA029";
   }
 
-  /*
-   * OSPFv3 Extended LSA TLV Type Identities
-   */
-  identity ospfv3-e-lsa-tlv-type {
-    description
-      "Base identity for OSPFv3 LSA TLV Types";
-  }
-
-  identity ospfv3-e-lsa-router-link-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA Router-Link TLV";
-  }
-
-  identity ospfv3-e-lsa-attached-routers-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA Attached-Routers TLV";
-  }
-
-  identity ospfv3-e-lsa-inter-area-prefix-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA Inter-Area-Prefix TLV";
-  }
-
-  identity ospfv3-e-lsa-inter-area-router-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA Inter-Area-Router TLV";
-  }
-
-  identity ospfv3-e-lsa-external-prefix-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA External-Prefix TLV";
-  }
-
-  identity ospfv3-e-lsa-intra-area-prefix-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA Intra-Area-Prefix TLV";
-  }
-
-  identity ospfv3-e-lsa-ipv6-link-local-addr-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA IPv6 Link-Local Address TLV";
-  }
-
-  identity ospfv3-e-lsa-ipv4-link-local-addr-tlv {
-    base ospfv3-e-lsa-tlv-type;
-    description
-      "OSPFv3 Extended LSA IPv4 Link-Local Address TLV";
-  }
-
-  /*
-   * OSPFv3 Extended LSA Sub-TLV Type Identities
-   */
-  identity ospfv3-e-lsa-sub-tlv-type {
-    description
-      "Base identity for OSPFv3 LSA Sub-TLV Types";
-  }
-
-  identity ospfv3-e-lsa-ipv6-fwd-addr-sub-tlv {
-    base ospfv3-e-lsa-sub-tlv-type;
-    description
-      "OSPFv3 Extended LSA IPv6 forwarding Address Sub-TLV";
-  }
-
-  identity ospfv3-e-lsa-ipv4-fwd-addr-sub-tlv {
-    base ospfv3-e-lsa-sub-tlv-type;
-    description
-      "OSPFv3 Extended LSA IPv4 forwarding Address Sub-TLV";
-  }
-
-  identity ospfv3-e-lsa-tag-sub-tlv {
-    base ospfv3-e-lsa-sub-tlv-type;
-    description
-      "OSPFv3 Extended LSA Tag Sub-TLV";
-  }
-
+ 
   grouping unknown-sub-tlv {
     description
       "Unknown TLV grouping";
@@ -270,12 +190,6 @@ module ietf-ospfv3-extended-lsa {
     container ipv6-fwd-addr-sub-tlv {
       description
         "IPv6 Forwarding Address Sub-TLV";
-      leaf ipv6-fwd-addr-sub-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-ipv6-fwd-addr-sub-tlv;
-        }
-        description "IPv6 Forwarding Address Sub-TLV Type - 1";
-      }
       leaf ipv6-fwd-addr-sub-tlv-length {
         type uint16;
         description
@@ -296,12 +210,6 @@ module ietf-ospfv3-extended-lsa {
     container ipv4-fwd-addr-sub-tlv {
       description
         "IPv4 Forwarding Address Sub-TLV";
-      leaf ipv4-fwd-addr-sub-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-ipv4-fwd-addr-sub-tlv;
-        }
-        description "IPv4 Forwarding Address Sub-TLV Type - 2";
-      }
       leaf ipv4-fwd-addr-sub-tlv-length {
         type uint16;
         description
@@ -322,12 +230,6 @@ module ietf-ospfv3-extended-lsa {
     container route-tag-sub-tlv {
       description
         "Route Tag Sub-TLV";
-      leaf route-tag-sub-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-tag-sub-tlv;
-        }
-        description "Route Tag Sub-TLV Type - 3";
-      }
       leaf route-tag-sub-tlv-length {
         type uint16;
         description
@@ -346,12 +248,6 @@ module ietf-ospfv3-extended-lsa {
   grouping external-prefix-tlv {
     container external-prefix-tlv {
       description "External Prefix LSA TLV";
-      leaf external-prefix-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-external-prefix-tlv;
-        }
-        description "External Prefix TLV Type - 5";
-      }
       leaf external-prefix-tlv-length {
         type uint16;
         description
@@ -387,12 +283,6 @@ module ietf-ospfv3-extended-lsa {
   grouping intra-area-prefix-tlv {
     container intra-prefix-tlv {
       description "Intra-Area Prefix LSA TLV";
-      leaf intra-prefix-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-intra-area-prefix-tlv;
-        }
-        description "Intra-Area Prefix TLV Type - 6";
-      }
       leaf intra-prefix-tlv-length {
         type uint16;
         description
@@ -415,12 +305,6 @@ module ietf-ospfv3-extended-lsa {
   grouping ipv6-link-local-tlv {
     container ipv6-link-local-tlv {
       description "IPv6 Link-Local LSA TLV";
-      leaf ipv6-link-local-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-ipv6-link-local-addr-tlv;
-        }
-        description "IPv6 Link-Local TLV Type - 7";
-      }
       leaf ipv6-link-local-tlv-length {
         type uint16;
         description
@@ -443,12 +327,6 @@ module ietf-ospfv3-extended-lsa {
   grouping ipv4-link-local-tlv {
     container ipv4-link-local-tlv {
       description "IPv6 Link-Local LSA TLV";
-      leaf ipv4-link-local-tlv-type {
-        type identityref {
-          base ospfv3-e-lsa-ipv4-link-local-addr-tlv;
-        }
-        description "IPv4 Link-Local TLV Type - 8";
-      }
       leaf ipv4-link-local-tlv-length {
         type uint16;
         description
@@ -487,12 +365,6 @@ module ietf-ospfv3-extended-lsa {
         }
         container link-tlv {
           description "E-Router LSA TLV";
-          leaf link-tlv-type {
-            type identityref {
-              base ospfv3-e-lsa-router-link-tlv;
-            }
-            description "Link TLV Type - 1";
-          }
           leaf link-tlv-length {
             type uint16;
             description
@@ -545,12 +417,6 @@ module ietf-ospfv3-extended-lsa {
         }
         container attached-router-tlv {
           description "Attached Router TLV";
-          leaf attached-router-tlv-type {
-            type identityref {
-              base ospfv3-e-lsa-attached-routers-tlv;
-            }
-            description "Attached Router TLV Type - 2";
-          }
           leaf attached-router-tlv-length {
             type uint16;
             description
@@ -584,12 +450,6 @@ module ietf-ospfv3-extended-lsa {
         }
         container inter-prefix-tlv {
           description "Unknown E-Inter-Area-Prefix LSA TLV";
-          leaf inter-prefix-tlv-type {
-            type identityref {
-              base ospfv3-e-lsa-inter-area-prefix-tlv;
-            }
-            description "Inter-Area Prefix TLV Type - 3";
-          }
           leaf inter-prefix-tlv-length {
             type uint16;
             description
@@ -624,12 +484,6 @@ module ietf-ospfv3-extended-lsa {
         }
         container inter-router-tlv {
           description "Unknown E-Inter-Area-Router LSA TLV";
-          leaf inter-routerx-tlv-type {
-            type identityref {
-              base ospfv3-e-lsa-inter-area-router-tlv;
-            }
-            description "Inter-Area Router TLV Type - 4";
-          }
           leaf inter-router-tlv-length {
             type uint16;
             description
@@ -799,6 +653,7 @@ module ietf-ospfv3-extended-lsa {
       description
         "This augmentation is only valid for OSPFv3.";
     }
+    uses ospfv3-e-lsa-body;
     description
       "OSPFv3 Link-Scoped Extended LSAs";
   }
