@@ -6,8 +6,6 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3688.xml'>
     <!ENTITY RFC5340 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.5340.xml'>
-    <!ENTITY RFC5246 PUBLIC '' 
-      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml'>
     <!ENTITY RFC6020 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6020.xml'>
     <!ENTITY RFC6241 PUBLIC '' 
@@ -16,16 +14,28 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6242.xml'>
     <!ENTITY RFC6536 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6536.xml'>
+    <!ENTITY RFC6991 PUBLIC '' 
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6991.xml'>
     <!ENTITY RFC7950 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7950.xml'>
     <!ENTITY RFC8022 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8022.xml'>
     <!ENTITY RFC8040 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8040.xml'>
+    <!ENTITY RFC8174 PUBLIC '' 
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml'>
+    <!ENTITY RFC8294 PUBLIC '' 
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8294.xml'>
+    <!ENTITY RFC8340 PUBLIC '' 
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8340.xml'>
+    <!ENTITY RFC8342 PUBLIC '' 
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8342.xml'>
     <!ENTITY RFC8349 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8349.xml'>
     <!ENTITY RFC8362 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8362.xml'>
+    <!ENTITY RFC8446 PUBLIC '' 
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8446.xml'>
     <!ENTITY I-D.ietf-ospf-yang PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.ietf-ospf-yang'>
     ]>
@@ -38,7 +48,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-03" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-04" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -140,14 +150,22 @@
       YANG model <xref target="I-D.ietf-ospf-yang"/>, which itself augments 
       <xref target="RFC8349"/>, to provide support for configuration and
       operational state for OSPFv3 Extended LSAs as defined in
-      <xref target="RFC8362"/>. 
-     </t>
+      <xref target="RFC8362"/>. </t>
+
+      <t>The YANG modules in this document conform to the Network Management
+         Datastore Architecture (NMDA) <xref target="RFC8342"/>.</t>
                
       <section title="Requirements Language">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
         "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-        document are to be interpreted as described in <xref target="RFC2119"></xref>.</t>
+        document are to be interpreted as described in <xref target="RFC2119"/> 
+        <xref target="RFC8174"/>.</t>
       </section>
+    </section>
+
+    <section title="Tree Diagrams">
+      <t> This document uses the graphical representation of data models
+          defined in <xref target="RFC8340"/>. </t>
     </section>
   
 
@@ -388,10 +406,13 @@ module: ietf-ospfv3-extended-lsa
   
 
   <section title="OSPFv3 Extended LSA Yang Module">
+  <t>The following RFCs and drafts are not referenced in the document text
+   but are referenced in the ietf-ospfv3-extended-lsa.yang module: 
+   <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
   <t>
     <figure>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2020-08-05.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2020-08-12.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace
@@ -401,11 +422,13 @@ module ietf-ospfv3-extended-lsa {
 
   import ietf-routing-types {
     prefix "rt-types";
+    reference "RFC 8294 - Common YANG Data Types for the 
+               Routing Area";
   }
 
   import ietf-inet-types {
     prefix "inet";
-    reference "RFC 6021 - Common YANG Data Types";
+    reference "RFC 6991 - Common YANG Data Types";
   }
 
   import ietf-routing {
@@ -416,7 +439,7 @@ module ietf-ospfv3-extended-lsa {
 
   import ietf-ospf {
     prefix "ospf";
-    reference "RFC XXXX - A YANG Data Model for OSPF
+    reference "RFC YYYY - A YANG Data Model for OSPF
                Protocol";
   }
 
@@ -453,17 +476,11 @@ module ietf-ospfv3-extended-lsa {
      (http://trustee.ietf.org/license-info).
 
      This version of this YANG module is part of RFC XXXX;
-     see the RFC itself for full legal notices.
-
-     The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL
-     NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'NOT RECOMMENDED',
-     'MAY', and 'OPTIONAL' in this document are to be interpreted as
-     described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
-     they appear in all capitals, as shown here.";
+     see the RFC itself for full legal notices.";
 
   reference "RFC XXXX";
 
-  revision 2020-08-05 {
+  revision 2020-08-12 {
     description
       "Initial revision.";
     reference
@@ -766,7 +783,7 @@ module ietf-ospfv3-extended-lsa {
 
   grouping ipv4-link-local-tlv {
     container ipv4-link-local-tlv {
-      description "IPv6 Link-Local LSA TLV";
+      description "IPv4 Link-Local LSA TLV";
       leaf ipv4-link-local-tlv-length {
         type uint16;
         description
@@ -788,9 +805,10 @@ module ietf-ospfv3-extended-lsa {
 
   grouping ospfv3-e-lsa-area {
     description "Area scope OSPFv3 Extended LSAs.";
+
     container e-router {
-      when  "derived-from(../../ospf:header/ospf:type, "
-        + "'ospfv3-e-router-lsa')" {
+      when  "../../ospf:header/ospf:type = "
+        + "'ospfv3-e-lsa:ospfv3-e-router-lsa'" {
         description "Only valid for OSPFv3 Extended-Router LSAs";
       }
       description "OSPv3 Extended Router LSA";
@@ -842,8 +860,8 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-network {
-      when "derived-from(../../ospf:header/ospf:type, "
-         + "'ospfv3-e-network-lsa')" {
+      when "../../ospf:header/ospf:type = "
+         + "'ospfv3-e-lsa:ospfv3-e-network-lsa'" {
         description
           "Only applies to E-Network LSAs.";
       }
@@ -876,8 +894,8 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-inter-area-prefix {
-      when "derived-from(../../ospf:header/ospf:type, "
-         + "'ospfv3-e-inter-area-prefix-lsa')" {
+      when "../../ospf:header/ospf:type = "
+         + "'ospfv3-e-lsa:ospfv3-e-inter-area-prefix-lsa'" {
         description
           "Only applies to E-Inter-Area-Prefix LSAs.";
       }
@@ -910,8 +928,8 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-inter-area-router {
-      when "derived-from(../../ospf:header/ospf:type, "
-         + "'ospfv3-e-inter-area-router-lsa')" {
+      when "../../ospf:header/ospf:type = "
+         + "'ospfv3-e-lsa:ospfv3-e-inter-area-router-lsa'" {
         description
           "Only applies to E-Inter-Area-Router LSAs.";
       }
@@ -949,8 +967,8 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-intra-area-prefix {
-      when "derived-from-or-self(../../ospf:header/ospf:type, "
-         + "'ospfv3-e-intra-area-prefix-lsa')" {
+      when "../../ospf:header/ospf:type = "
+         + "'ospfv3-e-lsa:ospfv3-e-intra-area-prefix-lsa'" {
         description
           "Only applies to E-Intra-Area-Prefix LSAs.";
       }
@@ -983,8 +1001,8 @@ module ietf-ospfv3-extended-lsa {
   grouping ospfv3-e-lsa-as {
     description "AS scope OSPFv3 Extended LSAs.";
     container e-as-external {
-      when "derived-from-or-self(../../ospf:header/ospf:type, "
-         + "'ospfv3-e-as-external-lsa')" {
+      when "../../ospf:header/ospf:type = "
+         + "'ospfv3-e-lsa:ospfv3-e-as-external-lsa'" {
         description
           "Only applies to E-AS-external LSAs.";
       }
@@ -1000,8 +1018,8 @@ module ietf-ospfv3-extended-lsa {
     }
 
     container e-nssa {
-      when "derived-from-or-self(../../ospf:header/ospf:type, "
-         + "'ospfv3-e-nssa-lsa')" {
+      when "../../ospf:header/ospf:type = "
+         + "'ospfv3-e-lsa:ospfv3-e-nssa-lsa'" {
         description
           "Only applies to E-NSSA LSAs.";
       }
@@ -1020,8 +1038,8 @@ module ietf-ospfv3-extended-lsa {
   grouping ospfv3-e-lsa-link {
     description "Link scope OSPFv3 Extended LSAs.";
     container e-link {
-      when "derived-from-or-self(../../ospf:header/ospf:type, "
-         + "'ospfv3-e-link-lsa')" {
+      when "../../ospf:header/ospf:type = "
+         + "'ospfv3-e-lsa:ospfv3-e-link-lsa'" {
         description
           "Only applies to Extended Link LSAs.";
       }
@@ -1047,14 +1065,13 @@ module ietf-ospfv3-extended-lsa {
   /* Configuration */
   augment "/rt:routing/rt:control-plane-protocols"
         + "/rt:control-plane-protocol/ospf:ospf" {
-     when "/rt:routing/rt:control-plane-protocols"
-        + "/rt:control-plane-protocol/rt:type = 'ospf:ospfv3'"  {
+    when "../rt:type = 'ospf:ospfv3'" {
       description
         "This augments the OSPFv3 routing protocol when used.";
     }
     description
       "This augments the OSPFv3 protocol configuration
-       with segment routing.";
+       with extended lsa.";
     leaf extended-lsa-support {
       type boolean;
       default false;
@@ -1066,7 +1083,7 @@ module ietf-ospfv3-extended-lsa {
 
   augment "/rt:routing/rt:control-plane-protocols/"
     + "rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area" {
-    when "'ospf:../../../../../rt:type' = 'ospf:ospfv3'" {
+    when "../../../rt:type = 'ospf:ospfv3'" {
       description
         "This augments the OSPFv3 area configuration
          when used.";
@@ -1092,9 +1109,8 @@ module ietf-ospfv3-extended-lsa {
     + "ospf:link-scope-lsa-type/ospf:link-scope-lsas/"
     + "ospf:link-scope-lsa/ospf:version/ospf:ospfv3/"
     + "ospf:ospfv3/ospf:body" {
-    when "derived-from-or-self(/rt:routing/rt:control-plane-protocols"
-       + "/rt:control-plane-protocol/rt:type,"
-       + "'ospfv3')"  {
+    when "../../../../../../../../../../../"
+       + "rt:type = 'ospf:ospfv3'"  {
       description
         "This augmentation is only valid for OSPFv3.";
     }
@@ -1110,9 +1126,8 @@ module ietf-ospfv3-extended-lsa {
     + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
     + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
     + "ospf:ospfv3/ospf:body" {
-    when "derived-from-or-self(/rt:routing/rt:control-plane-protocols"
-       + "/rt:control-plane-protocol/rt:type,"
-       + "'ospfv3')"  {
+    when "../../../../../../../../../"
+       + "rt:type = 'ospf:ospfv3'" {
       description
         "This augmentation is only valid for OSPFv3.";
     }
@@ -1121,16 +1136,15 @@ module ietf-ospfv3-extended-lsa {
 
     uses ospfv3-e-lsa-area;
   }
-  
+
   augment "/rt:routing/"
     + "rt:control-plane-protocols/rt:control-plane-protocol/"
     + "ospf:ospf/ospf:database/"
     + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
     + "ospf:as-scope-lsa/ospf:version/ospf:ospfv3/"
     + "ospf:ospfv3/ospf:body" {
-    when "derived-from-or-self(/rt:routing/rt:control-plane-protocols"
-       + "/rt:control-plane-protocol/rt:type,"
-       + "'ospfv3')"  {
+    when "../../../../../../../"
+      + "rt:type = 'ospf:ospfv3'" {
       description
         "This augmentation is only valid for OSPFv3.";
     }
@@ -1155,7 +1169,7 @@ module ietf-ospfv3-extended-lsa {
        RESTCONF <xref target="RFC8040"/>. The lowest NETCONF layer is the secure transport
        layer, and the mandatory-to-implement secure transport is Secure Shell (SSH)
        <xref target="RFC6242"/>. The lowest RESTCONF layer is HTTPS, and the
-       mandatory-to-implement secure transport is TLS <xref target="RFC5246"/>.</t>
+       mandatory-to-implement secure transport is TLS <xref target="RFC8446"/>.</t>
 
    <t>The NETCONF access control model <xref target="RFC6536"/> provides the 
       means to restrict access for particular NETCONF or RESTCONF users to a
@@ -1229,21 +1243,26 @@ module ietf-ospfv3-extended-lsa {
       <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
       &RFC2119;
       &RFC3688;
-      &RFC5246;
       &RFC5340;
       &RFC6020;
       &RFC6241;
       &RFC6242;
       &RFC6536;
+      &RFC6991;
       &RFC7950;
       &RFC8022;
       &RFC8040;
+      &RFC8174;
+      &RFC8294;
+      &RFC8342;
       &RFC8349;
       &RFC8362;
+      &RFC8446;
+      &I-D.ietf-ospf-yang;
     </references>
     <references title="Informative References">
       <!-- Here we use entities that we defined at the beginning. -->
-      &I-D.ietf-ospf-yang;
+      &RFC8340;     
     </references>
 
   </back>
