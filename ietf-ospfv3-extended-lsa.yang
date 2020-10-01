@@ -38,7 +38,7 @@ module ietf-ospfv3-extended-lsa {
       Author:   Acee Lindem
                 <mailto:acee@cisco.com>
       Author:   Sharmila Palani
-                <mailto:shpalani@cisco.com>
+                <mailto:sharmila.palani@microsoft.com>
       Author:   Yingzhen Qu
                 <mailto:yingzhen.qu@futurewei.com>";
 
@@ -67,7 +67,7 @@ module ietf-ospfv3-extended-lsa {
 
   reference "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2020-09-30 {
+  revision 2020-10-01 {
     description
       "Initial revision.";
     reference
@@ -758,9 +758,8 @@ module ietf-ospfv3-extended-lsa {
     leaf extended-lsa-support {
       type boolean;
       must  "derived-from(../ospf:area-type,'stub-nssa-area') or "
-         +  "not(../extended-lsa-support) or "
-         +  "../extended-lsa-support = 'true' or "
-         +  "../../../extended-lsa-support = 'false'" {
+         +  "(current() = 'true') or "
+         +  "(../../../extended-lsa-support = 'false')" {
         description
            "For regular areas, i.e., areas where AS-scoped LSAs
             disabling AreaExtendedLSASupport for a regular
