@@ -48,7 +48,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-09" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-10" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN"
@@ -136,8 +136,7 @@
 
   <middle>
     <section title="Overview">
-      <t>YANG <xref target="RFC6020"></xref>  <xref target="RFC7950"></xref> is a
-      data definition language
+      <t>YANG <xref target="RFC7950"></xref> is a data definition language
       used to define the contents of a conceptual data store
       that allows networked devices to be managed using NETCONF
       <xref target="RFC6241"/>.  YANG is proving relevant beyond its
@@ -412,7 +411,7 @@ module: ietf-ospfv3-extended-lsa
   <t>
     <figure>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2020-10-01.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2022-03-06.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace
@@ -465,9 +464,9 @@ module ietf-ospfv3-extended-lsa {
      described in RFC 8362.
 
      This YANG model conforms to the Network Management
-     Datastore Architecture (NMDA) as described in RFC 8242.
+     Datastore Architecture (NMDA) as described in RFC 8342.
 
-     Copyright (c) 2020 IETF Trust and the persons identified as
+     Copyright (c) 2022 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -482,7 +481,7 @@ module ietf-ospfv3-extended-lsa {
 
   reference "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2020-10-01 {
+  revision 2022-03-06 {
     description
       "Initial revision.";
     reference
@@ -1273,15 +1272,20 @@ module ietf-ospfv3-extended-lsa {
       that are writable/creatable/deletable (i.e., config true, which is the default).
       These data nodes may be considered sensitive or vulnerable in some network
       environments. Write operations (e.g., edit-config) to these data nodes without
-      proper protection can have a negative effect on network operations. For OSPFv3
+      proper protection can have a negative effect on network operations. There are 
+      the subtrees and data nodes and their sensitivity/vlunerability:
+      <list style="empty">
+      <t>/ospf:ospf/extended-lsa-support</t>
+      <t>/ospf:ospf/ospf:areas/ospf:area/extended-lsa-support - For OSPFv3
       Extended LSAs, the ability to disable OSPFv3 Extended LSA support result in a
-      denial of service.</t>
+      denial of service.</t></list></t>
 
    <t>Some of the readable data nodes in the ietf-ospfv3-extended-lsa.yang module
       may be considered sensitive or vulnerable in some network environments. It is thus
       important to control read access (e.g., via get, get-config, or notification)
       to these data nodes. The exposure of the Link State Database (LSDB) will
-      expose the detailed topology of the network. This may be undesirable since
+      expose the detailed topology of the network and information beyond the scope of
+      OSPF router. This may be undesirable since
       both due to the fact that exposure may facilitate other attacks. Additionally,
       network operators may consider their topologies to be sensitive confidential
       data.</t>
