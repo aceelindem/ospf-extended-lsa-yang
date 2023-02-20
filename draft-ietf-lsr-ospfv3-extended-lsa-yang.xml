@@ -36,8 +36,8 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8362.xml'>
     <!ENTITY RFC8446 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8446.xml'>
-    <!ENTITY I-D.ietf-ospf-yang PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.ietf-ospf-yang.xml'>
+    <!ENTITY RFC9129 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.9129.xml'>
     ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc strict="no" ?>
@@ -48,7 +48,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-12" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-13" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -147,7 +147,7 @@
       interfaces, such as CLI and programmatic APIs.</t>
 
       <t>This document defines a YANG data model augmenting the IETF OSPF
-      YANG model <xref target="I-D.ietf-ospf-yang"/>, which itself augments
+      YANG model <xref target="RFC9129"/>, which itself augments
       <xref target="RFC8349"/>, to provide support for configuration and
       operational state for OSPFv3 Extended LSAs as defined in
       <xref target="RFC8362"/>. </t>
@@ -177,7 +177,7 @@
       OSPFv3 Extended LSAs provide extensible TLV-based LSAs for the
       base LSA types defined in <xref target="RFC5340"/>.</t>
     <t>The OSPFv3 Extended LSA YANG module requires support for the OSPF base
-    model<xref target="I-D.ietf-ospf-yang"></xref> which defines basic OSPF
+    model<xref target="RFC9129"></xref> which defines basic OSPF
    configuration and state. The OSPF YANG model augments the ietf-routing YANG
    model defined in <xref target="RFC8022"/>.
    The augmentations defined in the ietf-ospfv3-extended-lsa YANG
@@ -1362,7 +1362,7 @@ module ietf-ospfv3-extended-lsa {
       &RFC8349;
       &RFC8362;
       &RFC8446;
-      &I-D.ietf-ospf-yang;
+      &RFC9129;
     </references>
     <references title="Informative References">
       <!-- Here we use entities that we defined at the beginning. -->
