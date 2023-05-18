@@ -46,7 +46,7 @@ module ietf-ospfv3-extended-lsa {
     "This YANG module defines the configuration
      and operational state for OSPFv3 Extended LSAs, which is
      common across all of the vendor implementations. The
-     semantics and encodings for OSPFv3 Extended LSAs is
+     semantics and encodings for OSPFv3 Extended LSAs are
      described in RFC 8362.
 
      This YANG model conforms to the Network Management
