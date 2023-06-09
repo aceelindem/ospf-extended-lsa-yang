@@ -156,10 +156,14 @@
          Datastore Architecture (NMDA) <xref target="RFC8342"/>.</t>
 
       <section title="Requirements Language">
-        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-        document are to be interpreted as described in <xref target="RFC2119"/>
-        <xref target="RFC8174"/>.</t>
+        <t>
+          The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+          NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+          "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in BCP 14 <xref target="RFC2119" format="default"/>
+          <xref target="RFC8174" format="default"/>
+          when, and only when, they appear in all capitals, as shown here.
+      </t>
       </section>
     </section>
 
@@ -183,7 +187,6 @@
    The augmentations defined in the ietf-ospfv3-extended-lsa YANG
    model will provide global configuration, area configuration, and addition of OSPFv3
    Extended LSAs to the Link State Database (LSDB) operational state.</t>
-    <figure>
       <artwork>
 module: ietf-ospfv3-extended-lsa
   augment /rt:routing/rt:control-plane-protocols
@@ -401,7 +404,6 @@ module: ietf-ospfv3-extended-lsa
                    +--ro route-tag?                  uint32
 
       </artwork>
-    </figure>
   </section>
 
 
@@ -409,9 +411,8 @@ module: ietf-ospfv3-extended-lsa
   <t>The following RFCs and drafts are not referenced in the document text
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
-    <figure>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-02-22.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-06-08.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace
@@ -438,7 +439,7 @@ module ietf-ospfv3-extended-lsa {
 
   import ietf-ospf {
     prefix "ospf";
-    reference "RFC YYYY - A YANG Data Model for OSPF
+    reference "RFC 9129 - A YANG Data Model for OSPF
                Protocol";
   }
 
@@ -446,7 +447,7 @@ module ietf-ospfv3-extended-lsa {
     "IETF LSR - Link State Routing Working Group";
 
   contact
-     "WG Web:   <http://tools.ietf.org/wg/lsr/>
+     "WG Web:   <https://datatracker.ietf.org/wg/lsr/>
       WG List:  <mailto:lsr@ietf.org>
 
       Author:   Acee Lindem
@@ -460,7 +461,7 @@ module ietf-ospfv3-extended-lsa {
     "This YANG module defines the configuration
      and operational state for OSPFv3 Extended LSAs, which is
      common across all of the vendor implementations. The
-     semantics and encodings for OSPFv3 Extended LSAs is
+     semantics and encodings for OSPFv3 Extended LSAs are
      described in RFC 8362.
 
      This YANG model conforms to the Network Management
@@ -488,7 +489,7 @@ module ietf-ospfv3-extended-lsa {
 
   reference "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2023-02-22 {
+  revision 2023-06-08 {
     description
       "Initial revision.";
     reference
@@ -1255,7 +1256,6 @@ module ietf-ospfv3-extended-lsa {
 }
 <CODE ENDS>
       ]]></artwork>
-    </figure>
   </section>
 
     <!-- Possibly a 'Contributors' section ... -->
@@ -1306,25 +1306,21 @@ module ietf-ospfv3-extended-lsa {
     <xref target="RFC3688"/>.  Following the format in <xref target="RFC3688"/>,
     the following registration is requested to be made:
   </t>
-   <figure>
    <artwork>
    URI: urn:ietf:params:xml:ns:yang:ietf-ospfv3-extended-lsa
    Registrant Contact: The IESG.
    XML: N/A, the requested URI is an XML namespace.
    </artwork>
-   </figure>
    <t>
      This document registers a YANG module in the YANG Module Names
      registry <xref target="RFC6020"/>.
    </t>
-   <figure>
    <artwork>
    name: ietf-ospfv3-extended-lsa
    namespace: urn:ietf:params:xml:ns:yang:ietf-ospfv3-extended-lsa
    prefix: ospfv3-e-lsa
    reference: RFC XXXX
    </artwork>
-   </figure>
 </section>
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>This document was produced using Marshall Rose's xml2rfc tool.</t>
