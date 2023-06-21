@@ -12,14 +12,10 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6241.xml'>
     <!ENTITY RFC6242 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6242.xml'>
-    <!ENTITY RFC6536 PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6536.xml'>
     <!ENTITY RFC6991 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6991.xml'>
     <!ENTITY RFC7950 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7950.xml'>
-    <!ENTITY RFC8022 PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8022.xml'>
     <!ENTITY RFC8040 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8040.xml'>
     <!ENTITY RFC8174 PUBLIC ''
@@ -28,6 +24,8 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8294.xml'>
     <!ENTITY RFC8340 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8340.xml'>
+    <!ENTITY RFC8341 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8341.xml'>
     <!ENTITY RFC8342 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8342.xml'>
     <!ENTITY RFC8349 PUBLIC ''
@@ -48,7 +46,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-14" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-15" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -183,7 +181,7 @@
     <t>The OSPFv3 Extended LSA YANG module requires support for the OSPF base
     model<xref target="RFC9129"></xref> which defines basic OSPF
    configuration and state. The OSPF YANG model augments the ietf-routing YANG
-   model defined in <xref target="RFC8022"/>.
+   model defined in <xref target="RFC8349"/>.
    The augmentations defined in the ietf-ospfv3-extended-lsa YANG
    model will provide global configuration, area configuration, and addition of OSPFv3
    Extended LSAs to the Link State Database (LSDB) operational state.</t>
@@ -211,28 +209,28 @@ module: ietf-ospfv3-extended-lsa
           |  +--ro length?   uint16
           |  +--ro value?    yang:hex-string
           +--ro intra-prefix-tlv
-          |  +--ro intra-prefix-tlv-length?   uint16
-          |  +--ro metric?                    rt-types:uint24
-          |  +--ro prefix?                    inet:ip-prefix
+          |  +--ro length?           uint16
+          |  +--ro metric?           rt-types:uint24
+          |  +--ro prefix?           inet:ip-prefix
           |  +--ro prefix-options
           |  |  +--ro prefix-options*   identityref
-          |  +--ro prefix-length?             uint8
+          |  +--ro prefix-length?    uint8
           |  +--ro sub-tlvs* []
           |     +--ro unknown-sub-tlv
           |        +--ro type?     uint16
           |        +--ro length?   uint16
           |        +--ro value?    yang:hex-string
           +--ro ipv6-link-local-tlv
-          |  +--ro ipv6-link-local-tlv-length?   uint16
-          |  +--ro link-local-address?           inet:ipv6-address
+          |  +--ro length?               uint16
+          |  +--ro link-local-address?   inet:ipv6-address
           |  +--ro sub-tlvs* []
           |     +--ro unknown-sub-tlv
           |        +--ro type?     uint16
           |        +--ro length?   uint16
           |        +--ro value?    yang:hex-string
           +--ro ipv4-link-local-tlv
-             +--ro ipv4-link-local-tlv-length?   uint16
-             +--ro link-local-address?           inet:ipv4-address
+             +--ro length?               uint16
+             +--ro link-local-address?   inet:ipv4-address
              +--ro sub-tlvs* []
                 +--ro unknown-sub-tlv
                    +--ro type?     uint16
@@ -254,11 +252,11 @@ module: ietf-ospfv3-extended-lsa
     |     |  +--ro length?   uint16
     |     |  +--ro value?    yang:hex-string
     |     +--ro link-tlv
-    |        +--ro link-tlv-length?         uint16
+    |        +--ro length?                  uint16
     |        +--ro interface-id?            uint32
     |        +--ro neighbor-interface-id?   uint32
     |        +--ro neighbor-router-id?      rt-types:router-id
-    |        +--ro type?                    uint8
+    |        +--ro type?                    ospf:router-link-type
     |        +--ro metric?                  uint16
     |        +--ro sub-tlvs* []
     |           +--ro unknown-sub-tlv
@@ -274,8 +272,8 @@ module: ietf-ospfv3-extended-lsa
     |     |  +--ro length?   uint16
     |     |  +--ro value?    yang:hex-string
     |     +--ro attached-router-tlv
-    |        +--ro attached-router-tlv-length?   uint16
-    |        +--ro Adjacent-neighbor-router-id*  rt-types:router-id
+    |        +--ro length?                        uint16
+    |        +--ro Adjacent-neighbor-router-id*   rt-types:router-id
     |        +--ro sub-tlvs* []
     |           +--ro unknown-sub-tlv
     |              +--ro type?     uint16
@@ -288,12 +286,12 @@ module: ietf-ospfv3-extended-lsa
     |     |  +--ro length?   uint16
     |     |  +--ro value?    yang:hex-string
     |     +--ro inter-prefix-tlv
-    |        +--ro inter-prefix-tlv-length?   uint16
-    |        +--ro metric?                    rt-types:uint24
-    |        +--ro prefix?                    inet:ip-prefix
+    |        +--ro length?           uint16
+    |        +--ro metric?           rt-types:uint24
+    |        +--ro prefix?           inet:ip-prefix
     |        +--ro prefix-options
     |        |  +--ro prefix-options*   identityref
-    |        +--ro prefix-length?             uint8
+    |        +--ro prefix-length?    uint8
     |        +--ro sub-tlvs* []
     |           +--ro unknown-sub-tlv
     |              +--ro type?     uint16
@@ -306,13 +304,13 @@ module: ietf-ospfv3-extended-lsa
     |     |  +--ro length?   uint16
     |     |  +--ro value?    yang:hex-string
     |     +--ro inter-router-tlv
-    |        +--ro inter-router-tlv-length?   uint16
+    |        +--ro length?                  uint16
     |        +--ro router-bits
     |        |  +--ro rtr-lsa-bits*   identityref
     |        +--ro lsa-options
     |        |  +--ro lsa-options*   identityref
-    |        +--ro metric?                    rt-types:uint24
-    |        +--ro destination-router-id?     rt-types:router-id
+    |        +--ro metric?                  rt-types:uint24
+    |        +--ro destination-router-id?   rt-types:router-id
     |        +--ro sub-tlvs* []
     |           +--ro unknown-sub-tlv
     |              +--ro type?     uint16
@@ -328,12 +326,12 @@ module: ietf-ospfv3-extended-lsa
           |  +--ro length?   uint16
           |  +--ro value?    yang:hex-string
           +--ro intra-prefix-tlv
-             +--ro intra-prefix-tlv-length?   uint16
-             +--ro metric?                    rt-types:uint24
-             +--ro prefix?                    inet:ip-prefix
+             +--ro length?           uint16
+             +--ro metric?           rt-types:uint24
+             +--ro prefix?           inet:ip-prefix
              +--ro prefix-options
              |  +--ro prefix-options*   identityref
-             +--ro prefix-length?             uint8
+             +--ro prefix-length?    uint8
              +--ro sub-tlvs* []
                 +--ro unknown-sub-tlv
                    +--ro type?     uint16
@@ -351,28 +349,28 @@ module: ietf-ospfv3-extended-lsa
     |     |  +--ro length?   uint16
     |     |  +--ro value?    yang:hex-string
     |     +--ro external-prefix-tlv
-    |        +--ro external-prefix-tlv-length?   uint16
+    |        +--ro length?           uint16
     |        +--ro flags
     |        |  +--ro ospfv3-e-external-prefix-bits*   identityref
-    |        +--ro metric?                       rt-types:uint24
-    |        +--ro prefix?                       inet:ip-prefix
+    |        +--ro metric?           rt-types:uint24
+    |        +--ro prefix?           inet:ip-prefix
     |        +--ro prefix-options
     |        |  +--ro prefix-options*   identityref
-    |        +--ro prefix-length?                uint8
+    |        +--ro prefix-length?    uint8
     |        +--ro sub-tlvs* []
-    |           +--ro unknown-sub-tlv
-    |           |  +--ro type?     uint16
-    |           |  +--ro length?   uint16
-    |           |  +--ro value?    yang:hex-string
     |           +--ro ipv6-fwd-addr-sub-tlv
-    |           |  +--ro ipv6-fwd-addr-sub-tlv-length?   uint16
-    |           |  +--ro forwarding-address?       inet:ipv6-address
+    |           |  +--ro length?               uint16
+    |           |  +--ro forwarding-address?   inet:ipv6-address
     |           +--ro ipv4-fwd-addr-sub-tlv
-    |           |  +--ro ipv4-fwd-addr-sub-tlv-length?   uint16
-    |           |  +--ro forwarding-address?       inet:ipv4-address
+    |           |  +--ro length?               uint16
+    |           |  +--ro forwarding-address?   inet:ipv4-address
     |           +--ro route-tag-sub-tlv
-    |              +--ro route-tag-sub-tlv-length?   uint16
-    |              +--ro route-tag?                  uint32
+    |           |  +--ro length?      uint16
+    |           |  +--ro route-tag?   uint32
+    |           +--ro unknown-sub-tlv
+    |              +--ro type?     uint16
+    |              +--ro length?   uint16
+    |              +--ro value?    yang:hex-string
     +--ro e-nssa
        +--ro e-external-tlvs* []
           +--ro unknown-tlv
@@ -380,28 +378,28 @@ module: ietf-ospfv3-extended-lsa
           |  +--ro length?   uint16
           |  +--ro value?    yang:hex-string
           +--ro external-prefix-tlv
-             +--ro external-prefix-tlv-length?   uint16
+             +--ro length?           uint16
              +--ro flags
              |  +--ro ospfv3-e-external-prefix-bits*   identityref
-             +--ro metric?                       rt-types:uint24
-             +--ro prefix?                       inet:ip-prefix
+             +--ro metric?           rt-types:uint24
+             +--ro prefix?           inet:ip-prefix
              +--ro prefix-options
              |  +--ro prefix-options*   identityref
-             +--ro prefix-length?                uint8
+             +--ro prefix-length?    uint8
              +--ro sub-tlvs* []
-                +--ro unknown-sub-tlv
-                |  +--ro type?     uint16
-                |  +--ro length?   uint16
-                |  +--ro value?    yang:hex-string
                 +--ro ipv6-fwd-addr-sub-tlv
-                |  +--ro ipv6-fwd-addr-sub-tlv-length?   uint16
-                |  +--ro forwarding-address?       inet:ipv6-address
+                |  +--ro length?               uint16
+                |  +--ro forwarding-address?   inet:ipv6-address
                 +--ro ipv4-fwd-addr-sub-tlv
-                |  +--ro ipv4-fwd-addr-sub-tlv-length?   uint16
-                |  +--ro forwarding-address?       inet:ipv4-address
+                |  +--ro length?               uint16
+                |  +--ro forwarding-address?   inet:ipv4-address
                 +--ro route-tag-sub-tlv
-                   +--ro route-tag-sub-tlv-length?   uint16
-                   +--ro route-tag?                  uint32
+                |  +--ro length?      uint16
+                |  +--ro route-tag?   uint32
+                +--ro unknown-sub-tlv
+                   +--ro type?     uint16
+                   +--ro length?   uint16
+                   +--ro value?    yang:hex-string
 
       </artwork>
   </section>
@@ -412,7 +410,7 @@ module: ietf-ospfv3-extended-lsa
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-06-08.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-06-20.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace
@@ -422,25 +420,27 @@ module ietf-ospfv3-extended-lsa {
 
   import ietf-routing-types {
     prefix "rt-types";
-    reference "RFC 8294 - Common YANG Data Types for the
-               Routing Area";
+    reference 
+      "RFC 8294: Common YANG Data Types for the Routing Area";
   }
 
   import ietf-inet-types {
     prefix "inet";
-    reference "RFC 6991 - Common YANG Data Types";
+    reference 
+      "RFC 6991: Common YANG Data Types";
   }
 
   import ietf-routing {
     prefix "rt";
-    reference "RFC 8349 - A YANG Data Model for Routing
-               Management (NMDA Version)";
+    reference 
+      "RFC 8349: A YANG Data Model for Routing
+       Management (NMDA Version)";
   }
 
   import ietf-ospf {
     prefix "ospf";
-    reference "RFC 9129 - A YANG Data Model for OSPF
-               Protocol";
+    reference 
+      "RFC 9129: A YANG Data Model for OSPF Protocol";
   }
 
   organization
@@ -489,11 +489,11 @@ module ietf-ospfv3-extended-lsa {
 
   reference "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2023-06-08 {
+  revision 2023-06-20 {
     description
       "Initial revision.";
     reference
-      "RFC XXXX: A YANG Data Model for OSPFv3 Extended LSAs.";
+      "RFC XXXX: YANG Data Model for OSPFv3 Extended LSAs.";
   }
 
   /*
@@ -503,56 +503,63 @@ module ietf-ospfv3-extended-lsa {
     base ospf:ospfv3-lsa-type;
     description
       "OSPFv3 Extended Router LSA - Type 0xA021";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 4.1";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 4.1";
   }
 
   identity ospfv3-e-network-lsa {
     base ospf:ospfv3-lsa-type;
     description
       "OSPFv3 Extended Network LSA - Type 0xA022";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 4.2";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 4.2";
   }
 
   identity ospfv3-e-summary-lsa-type {
     base ospf:ospfv3-lsa-type;
     description
       "OSPFv3 Extended Summary LSA types";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 4.3 and Section 4.4";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 4.3 and Section 4.4";
   }
 
   identity ospfv3-e-inter-area-prefix-lsa {
     base ospfv3-e-summary-lsa-type;
     description
       "OSPFv3 Extended Inter-area Prefix LSA - Type 0xA023";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 4.3";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 4.3";
   }
 
   identity ospfv3-e-inter-area-router-lsa {
     base ospfv3-e-summary-lsa-type;
     description
       "OSPFv3 Extended Inter-area Router LSA - Type 0xA024";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 4.3";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 4.3";
   }
 
   identity ospfv3-e-external-lsa-type {
     base ospf:ospfv3-lsa-type;
     description
       "OSPFv3 Extended External LSA types";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 4.5 and Section 4.6";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 4.5 and Section 4.6";
   }
 
   identity ospfv3-e-as-external-lsa {
     base ospfv3-e-external-lsa-type;
     description
       "OSPFv3 Extended AS-External LSA - Type 0xC025";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 4.5";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 4.5";
   }
 
   identity ospfv3-e-nssa-lsa {
@@ -560,31 +567,35 @@ module ietf-ospfv3-extended-lsa {
     description
       "OSPFv3 Extended Not-So-Stubby-Area (NSSA) LSA -
        Type 0xA027";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 4.6";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 4.6";
   }
 
   identity ospfv3-e-link-lsa {
     base ospf:ospfv3-lsa-type;
     description
       "OSPFv3 Extended Link LSA - Type 0x8028";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 4.7";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 4.7";
   }
 
   identity ospfv3-e-intra-area-prefix-lsa {
     base ospf:ospfv3-lsa-type;
     description
       "OSPFv3 Extended Intra-area Prefix LSA - Type 0xA029";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 4.8";
+    reference
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 4.8";
   }
 
   identity ospfv3-e-prefix-option {
     description
       "Base identity for OSPFv3 Prefix Options.";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.1";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.1";
   }
 
   identity nu-bit {
@@ -592,8 +603,9 @@ module ietf-ospfv3-extended-lsa {
     description
       "When set, the prefix should be excluded
        from IPv6 unicast calculations.";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.1";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.1";
   }
 
   identity la-bit {
@@ -601,8 +613,9 @@ module ietf-ospfv3-extended-lsa {
     description
       "When set, the prefix is actually an IPv6 interface
        address of the Advertising Router.";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.1";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.1";
   }
 
   identity p-bit {
@@ -611,8 +624,9 @@ module ietf-ospfv3-extended-lsa {
       "When set, the NSSA area prefix should be
        translated to an AS External LSA and advertised
        by the translating NSSA Border Router.";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.1";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.1";
   }
 
   identity dn-bit {
@@ -621,8 +635,9 @@ module ietf-ospfv3-extended-lsa {
       "When set, the inter-area-prefix LSA or
        AS-external LSA prefix has been advertised as an
        L3VPN prefix.";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.1";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.1";
   }
 
   identity n-bit {
@@ -630,15 +645,17 @@ module ietf-ospfv3-extended-lsa {
     description
       "When set, the prefix is a host address that identifies
        the advertising router.";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.1";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.1";
   }
 
   identity ospfv3-e-external-prefix-option {
     description
       "Base identity for OSPFv3 External Prefix Options.";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.6";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.6";
   }
 
   identity e-bit {
@@ -646,8 +663,9 @@ module ietf-ospfv3-extended-lsa {
     description
       "When set, the metric specified is a Type 2
        external metric.";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.6";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.6";
   }
 
   grouping unknown-sub-tlv {
@@ -655,10 +673,12 @@ module ietf-ospfv3-extended-lsa {
       "Unknown TLV grouping";
     container unknown-sub-tlv {
       uses ospf:tlv;
-      description "Unknown External TLV Sub-TLV";
+      description 
+        "Unknown External TLV Sub-TLV";
     }
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 6.3";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 6.3";
   }
 
   grouping ospfv3-lsa-prefix {
@@ -680,90 +700,30 @@ module ietf-ospfv3-extended-lsa {
            contain the identities for the OSPFv3 options
            that are set for the OSPFv3 prefix.";
       }
-      description "Prefix options.";
-      reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-        Extensibility, Section 3.1";
+      description 
+        "Prefix options.";
+      reference 
+        "RFC 8362:  OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Section 3.1";
     }
 
     leaf prefix-length {
       type uint8 {
         range "0..128";
       }
-      description "Prefix length.";
+      description 
+        "Prefix length.";
     }
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3";
-  }
-
-  grouping ipv6-fwd-addr-sub-tlv {
-    container ipv6-fwd-addr-sub-tlv {
-      description
-        "IPv6 Forwarding Address Sub-TLV";
-      leaf ipv6-fwd-addr-sub-tlv-length {
-        type uint16;
-        description
-          "IPv6 Forwarding Addrss Sub-TLV Length - 16
-           for IPv6 address";
-      }
-      leaf forwarding-address {
-        type inet:ipv6-address;
-        description
-          "Forwarding address";
-      }
-    }
-    description
-      "IPv6 Forwarding Address Sub-TLV grouping";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.10";
-  }
-
-  grouping ipv4-fwd-addr-sub-tlv {
-    container ipv4-fwd-addr-sub-tlv {
-      description
-        "IPv4 Forwarding Address Sub-TLV";
-      leaf ipv4-fwd-addr-sub-tlv-length {
-        type uint16;
-        description
-          "IPv4 Forwarding Addrss Sub-TLV Length - 4
-           for IPv4 address";
-      }
-      leaf forwarding-address {
-        type inet:ipv4-address;
-        description
-          "Forwarding address";
-      }
-    }
-    description
-      "IPv4 Forwarding Address Sub-TLV grouping";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.11";
-  }
-
-  grouping route-tag-sub-tlv {
-    container route-tag-sub-tlv {
-      description
-        "Route Tag Sub-TLV";
-      leaf route-tag-sub-tlv-length {
-        type uint16;
-        description
-          "Route Tag Sub-TLV Length - 4 for 32-bit tag";
-      }
-      leaf route-tag {
-        type uint32;
-        description
-          "Route Tag";
-      }
-    }
-    description
-      "Route Tag Sub-TLV grouping";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.12";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3";
   }
 
   grouping external-prefix-tlv {
     container external-prefix-tlv {
-      description "External Prefix LSA TLV";
-      leaf external-prefix-tlv-length {
+      description 
+        "External Prefix LSA TLV";
+      leaf length {
         type uint16;
         description
           "External Prefix TLV Length - Variable dependent
@@ -774,32 +734,89 @@ module ietf-ospfv3-extended-lsa {
           type identityref {
             base ospfv3-e-external-prefix-option;
           }
-          description "OSPFv3 external-prefix TLV bits list.";
+          description 
+            "OSPFv3 external-prefix TLV bits list.";
         }
-        description "External Prefix Flags";
+        description 
+          "External Prefix Flags";
       }
       leaf metric {
         type rt-types:uint24;
-        description "External Prefix Metric";
+        description
+          "External Prefix Metric";
       }
       uses ospfv3-lsa-prefix;
       list sub-tlvs {
-        description "External Prefix TLV Sub-TLVs";
+        description 
+          "External Prefix TLV Sub-TLVs";
+        container ipv6-fwd-addr-sub-tlv {
+          description
+            "IPv6 Forwarding Address Sub-TLV";
+          leaf length {
+            type uint16;
+            description
+              "IPv6 Forwarding Address Sub-TLV Length - 16
+               for IPv6 address";
+          }
+          leaf forwarding-address {
+            type inet:ipv6-address;
+            description
+              "Forwarding address";
+          }
+          reference 
+            "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+             Extensibility, Section 3.10";
+        }
+        container ipv4-fwd-addr-sub-tlv {
+          description
+            "IPv4 Forwarding Address Sub-TLV";
+          leaf length {
+            type uint16;
+            description
+              "IPv4 Forwarding Address Sub-TLV Length - 4
+               for IPv4 address";
+          }
+          leaf forwarding-address {
+            type inet:ipv4-address;
+            description
+              "Forwarding address";
+          }
+          reference 
+            "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+             Extensibility, Section 3.11";
+        }
+        container route-tag-sub-tlv {
+          description
+            "Route Tag Sub-TLV";
+          leaf length {
+            type uint16;
+            description
+              "Route Tag Sub-TLV Length - 4 for 32-bit tag";
+          }
+          leaf route-tag {
+            type uint32;
+            description
+              "Route Tag";
+          }
+          reference 
+            "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+             Extensibility, Section 3.12";
+        }
         uses unknown-sub-tlv;
-        uses ipv6-fwd-addr-sub-tlv;
-        uses ipv4-fwd-addr-sub-tlv;
-        uses route-tag-sub-tlv;
       }
     }
-    description "External Prefix TLV Grouping";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.6";
+    description 
+      "External Prefix TLV Grouping";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.6";
   }
 
   grouping intra-area-prefix-tlv {
     container intra-prefix-tlv {
-      description "Intra-Area Prefix LSA TLV";
-      leaf intra-prefix-tlv-length {
+      description 
+        "Intra-Area Prefix LSA TLV";
+      leaf length {
         type uint16;
         description
           "Intra-Area Prefix TLV Length - Variable dependent
@@ -807,23 +824,28 @@ module ietf-ospfv3-extended-lsa {
       }
       leaf metric {
         type rt-types:uint24;
-        description "Intra-Area Prefix Metric";
+        description 
+          "Intra-Area Prefix Metric";
       }
       uses ospfv3-lsa-prefix;
       list sub-tlvs {
-        description "Intra-Area Prefix TLV Sub-TLVs";
+        description 
+          "Intra-Area Prefix TLV Sub-TLVs";
         uses unknown-sub-tlv;
       }
     }
-    description "Intra-Area Prefix TLV Grouping";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-              Extensibility, Section 3.4";
+    description 
+      "Intra-Area Prefix TLV Grouping";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.4";
   }
 
   grouping ipv6-link-local-tlv {
     container ipv6-link-local-tlv {
-      description "IPv6 Link-Local LSA TLV";
-      leaf ipv6-link-local-tlv-length {
+      description 
+        "IPv6 Link-Local LSA TLV";
+      leaf length {
         type uint16;
         description
           "IPv6 Link-Local TLV Length - Variable dependent
@@ -835,19 +857,23 @@ module ietf-ospfv3-extended-lsa {
           "IPv6 Link Local address";
       }
       list sub-tlvs {
-        description "IPv6 Link Local TLV Sub-TLVs";
+        description 
+          "IPv6 Link Local TLV Sub-TLVs";
         uses unknown-sub-tlv;
       }
     }
-    description "IPv6 Link-Local TLV Grouping";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-      Extensibility, Section 3.8";
+    description 
+      "IPv6 Link-Local TLV Grouping";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.8";
   }
 
   grouping ipv4-link-local-tlv {
     container ipv4-link-local-tlv {
-      description "IPv4 Link-Local LSA TLV";
-      leaf ipv4-link-local-tlv-length {
+      description 
+        "IPv4 Link-Local LSA TLV";
+      leaf length {
         type uint16;
         description
           "IPv4 Link-Local TLV Length - Variable dependent
@@ -859,69 +885,86 @@ module ietf-ospfv3-extended-lsa {
           "IPv4 Link Local address";
       }
       list sub-tlvs {
-        description "IPv4 Link Local TLV Sub-TLVs";
+        description 
+          "IPv4 Link Local TLV Sub-TLVs";
         uses unknown-sub-tlv;
       }
     }
-    description "IPv4 Link-Local TLV Grouping";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-      Extensibility, Section 3.9";
+    description 
+      "IPv4 Link-Local TLV Grouping";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3.9";
   }
 
   grouping ospfv3-e-lsa-area {
-    description "Area scope OSPFv3 Extended LSAs.";
-    reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
+    description 
+      "Area scope OSPFv3 Extended LSAs.";
+    reference 
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
       Extensibility, Section 4";
 
     container e-router {
       when  "../../ospf:header/ospf:type = "
         + "'ospfv3-e-lsa:ospfv3-e-router-lsa'" {
-        description "Only valid for OSPFv3 Extended-Router LSAs";
+        description
+          "Only valid for OSPFv3 Extended-Router LSAs";
       }
-      description "OSPv3 Extended Router LSA";
-      reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-        Extensibility, Section 4.1";
+      description 
+        "OSPv3 Extended Router LSA";
+      reference 
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Section 4.1";
       uses ospf:ospf-router-lsa-bits;
       uses ospf:ospfv3-lsa-options;
 
       list e-router-tlvs {
-        description "E-Router LSA TLVs";
+        description 
+          "E-Router LSA TLVs";
         container unknown-tlv {
           uses ospf:tlv;
-          description "Unknown E-Router TLV";
+          description 
+            "Unknown E-Router TLV";
         }
         container link-tlv {
-          description "E-Router LSA TLV";
-          leaf link-tlv-length {
+          description 
+            "E-Router LSA TLV";
+          leaf length {
             type uint16;
             description
               "Link TLV Length - Variable dependent on sub-TLVs";
           }
           leaf interface-id {
             type uint32;
-            description "Interface ID for link";
+            description 
+              "Interface ID for link";
           }
           leaf neighbor-interface-id {
             type uint32;
-            description "Neighbor's Interface ID for link";
+            description 
+              "Neighbor's Interface ID for link";
           }
           leaf neighbor-router-id {
             type rt-types:router-id;
-            description "Neighbor's Router ID for link";
+            description 
+              "Neighbor's Router ID for link";
           }
           leaf type {
             type ospf:router-link-type;
-            description "Link type: 1 - Point-to-Point Link
-                                    2 - Transit Network Link
-                                    3 - Stub Network Link Link
-                                    4 - Virtual Link";
+            description 
+              "Link type: 1 - Point-to-Point Link
+                          2 - Transit Network Link
+                          3 - Stub Network Link Link
+                          4 - Virtual Link";
           }
           leaf metric {
             type uint16;
-              description "Link Metric";
+              description 
+                "Link Metric";
           }
           list sub-tlvs {
-            description "Link TLV Sub-TLVs";
+            description 
+              "Link TLV Sub-TLVs";
             uses unknown-sub-tlv;
           }
         }
@@ -934,19 +977,24 @@ module ietf-ospfv3-extended-lsa {
         description
           "Only applies to E-Network LSAs.";
       }
-      description "Extended Network LSA";
-      reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-        Extensibility, Section 4.2";
+      description 
+        "Extended Network LSA";
+      reference 
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Section 4.2";
       uses ospf:ospfv3-lsa-options;
       list e-network-tlvs {
-        description "E-Network LSA TLVs";
-        container unknown--tlv {
+        description
+          "E-Network LSA TLVs";
+        container unknown-tlv {
           uses ospf:tlv;
-          description "Unknown E-Network TLV";
+          description
+            "Unknown E-Network TLV";
         }
         container attached-router-tlv {
-          description "Attached Router TLV";
-          leaf attached-router-tlv-length {
+          description
+            "Attached Router TLV";
+          leaf length {
             type uint16;
             description
               "Attached Router TLV Length - Variable dependent
@@ -954,10 +1002,12 @@ module ietf-ospfv3-extended-lsa {
           }
           leaf-list Adjacent-neighbor-router-id {
             type rt-types:router-id;
-            description "Adjacent Neighbor's Router ID";
+            description
+              "Adjacent Neighbor's Router ID";
           }
           list sub-tlvs {
-            description "Attached Router TLV Sub-TLVs";
+            description
+              "Attached Router TLV Sub-TLVs";
             uses unknown-sub-tlv;
           }
         }
@@ -970,18 +1020,23 @@ module ietf-ospfv3-extended-lsa {
         description
           "Only applies to E-Inter-Area-Prefix LSAs.";
       }
-      description "Extended Inter-Area Prefix LSA";
-      reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-        Extensibility, Section 4.3";
+      description
+        "Extended Inter-Area Prefix LSA";
+      reference
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Section 4.3";
       list e-inter-prefix-tlvs {
-        description "E-Inter-Area-Prefix LSA TLVs";
+        description
+          "E-Inter-Area-Prefix LSA TLVs";
         container unknown--tlv {
           uses ospf:tlv;
-          description "Unknown E-Inter-Area-Prefix TLV";
+          description
+            "Unknown E-Inter-Area-Prefix TLV";
         }
         container inter-prefix-tlv {
-          description "Unknown E-Inter-Area-Prefix LSA TLV";
-          leaf inter-prefix-tlv-length {
+          description
+            "Unknown E-Inter-Area-Prefix LSA TLV";
+          leaf length {
             type uint16;
             description
               "Inter-Area-Prefix TLV Length - Variable dependent
@@ -989,11 +1044,13 @@ module ietf-ospfv3-extended-lsa {
           }
           leaf metric {
             type rt-types:uint24;
-              description "Inter-Area Prefix Metric";
+              description
+                "Inter-Area Prefix Metric";
           }
           uses ospfv3-lsa-prefix;
           list sub-tlvs {
-            description "Inter-Area Prefix TLV Sub-TLVs";
+            description
+              "Inter-Area Prefix TLV Sub-TLVs";
             uses unknown-sub-tlv;
           }
         }
@@ -1006,18 +1063,23 @@ module ietf-ospfv3-extended-lsa {
         description
           "Only applies to E-Inter-Area-Router LSAs.";
       }
-      description "Extended Inter-Area Router LSA";
-      reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-        Extensibility, Section 4.4";
+      description
+        "Extended Inter-Area Router LSA";
+      reference
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Section 4.4";
       list e-inter-router-tlvs {
-        description "E-Inter-Area-Router LSA TLVs";
+        description
+          "E-Inter-Area-Router LSA TLVs";
         container unknown-tlv {
           uses ospf:tlv;
-          description "Unknown E-Inter-Area-Router TLV";
+          description
+            "Unknown E-Inter-Area-Router TLV";
         }
         container inter-router-tlv {
-          description "Unknown E-Inter-Area-Router LSA TLV";
-          leaf inter-router-tlv-length {
+          description
+            "Unknown E-Inter-Area-Router LSA TLV";
+          leaf length {
             type uint16;
             description
               "Inter-Area-Router TLV Length - Variable dependent
@@ -1027,14 +1089,17 @@ module ietf-ospfv3-extended-lsa {
           uses ospf:ospfv3-lsa-options;
           leaf metric {
             type rt-types:uint24;
-              description "Inter-Area Router Metric";
+              description
+                "Inter-Area Router Metric";
           }
           leaf destination-router-id {
             type rt-types:router-id;
-            description "Destination Router ID";
+            description
+              "Destination Router ID";
           }
           list sub-tlvs {
-            description "Inter-Area Router TLV Sub-TLVs";
+            description
+              "Inter-Area Router TLV Sub-TLVs";
             uses unknown-sub-tlv;
           }
         }
@@ -1047,12 +1112,15 @@ module ietf-ospfv3-extended-lsa {
         description
           "Only applies to E-Intra-Area-Prefix LSAs.";
       }
-      description "E-Intra-Area-Prefix LSA";
-      reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-        Extensibility, Section 4.8";
+      description
+        "E-Intra-Area-Prefix LSA";
+      reference
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Section 4.8";
       leaf referenced-ls-type {
         type uint16;
-        description "Referenced Link State type";
+        description
+          "Referenced Link State type";
       }
       leaf referenced-link-state-id {
         type uint32;
@@ -1065,10 +1133,12 @@ module ietf-ospfv3-extended-lsa {
           "Referenced Advertising Router";
       }
       list e-intra-prefix-tlvs {
-        description "E-Intra-Area-Prefix LSA TLVs";
+        description
+          "E-Intra-Area-Prefix LSA TLVs";
         container unknown-tlv {
           uses ospf:tlv;
-          description "Unknown E-Intra-Area-Prefix TLV";
+          description
+            "Unknown E-Intra-Area-Prefix TLV";
         }
         uses intra-area-prefix-tlv;
       }
@@ -1076,7 +1146,8 @@ module ietf-ospfv3-extended-lsa {
   }
 
   grouping ospfv3-e-lsa-as {
-    description "AS scope OSPFv3 Extended LSAs.";
+    description
+      "AS scope OSPFv3 Extended LSAs.";
     container e-as-external {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-as-external-lsa'" {
@@ -1084,15 +1155,19 @@ module ietf-ospfv3-extended-lsa {
           "Only applies to E-AS-external LSAs.";
       }
       list e-external-tlvs {
-        description "E-External LSA TLVs";
+        description
+          "E-External LSA TLVs";
         container unknown-tlv {
           uses ospf:tlv;
-          description "Unknown E-External TLV";
+          description
+            "Unknown E-External TLV";
         }
         uses external-prefix-tlv;
       }
-      description "E-AS-External LSA.";
-      reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
+      description
+        "E-AS-External LSA.";
+      reference
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
         Extensibility, Section 4.5";
     }
 
@@ -1103,40 +1178,50 @@ module ietf-ospfv3-extended-lsa {
           "Only applies to E-NSSA LSAs.";
       }
       list e-external-tlvs {
-        description "E-NSSA LSA TLVs";
+        description
+          "E-NSSA LSA TLVs";
         container unknown-tlv {
           uses ospf:tlv;
-          description "Unknown E-External TLV";
+          description
+            "Unknown E-External TLV";
         }
         uses external-prefix-tlv;
       }
-      description "E-NSSA LSA.";
-      reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-        Extensibility, Section 4.6";
+      description
+        "E-NSSA LSA.";
+      reference
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Section 4.6";
     }
   }
 
   grouping ospfv3-e-lsa-link {
-    description "Link scope OSPFv3 Extended LSAs.";
+    description
+      "Link scope OSPFv3 Extended LSAs.";
     container e-link {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-link-lsa'" {
         description
           "Only applies to Extended Link LSAs.";
       }
-      description "E-Link LSA";
-      reference "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-        Extensibility, Section 4.7";
+      description
+        "E-Link LSA";
+      reference
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Section 4.7";
       leaf rtr-priority {
         type uint8;
-        description "Router Priority for the interface.";
+        description
+          "Router Priority for the interface.";
       }
       uses ospf:ospfv3-lsa-options;
       list e-link-tlvs {
-        description "E-Link LSA TLVs";
+        description
+          "E-Link LSA TLVs";
         container unknown-tlv {
           uses ospf:tlv;
-          description "Unknown E-Link TLV";
+          description
+            "Unknown E-Link TLV";
         }
         uses intra-area-prefix-tlv;
         uses ipv6-link-local-tlv;
@@ -1154,7 +1239,7 @@ module ietf-ospfv3-extended-lsa {
     }
     description
       "This augments the OSPFv3 protocol configuration
-       with extended LSA support.";
+       with Extended LSA support.";
     leaf extended-lsa-support {
       type boolean;
       default false;
@@ -1176,7 +1261,7 @@ module ietf-ospfv3-extended-lsa {
     }
     description
       "This augments the OSPFv3 protocol area
-       configuration with extended LSA support.";
+       configuration with Extended LSA support.";
     leaf extended-lsa-support {
       type boolean;
       must  "derived-from(../ospf:area-type,'stub-nssa-area') or "
@@ -1194,7 +1279,7 @@ module ietf-ospfv3-extended-lsa {
          area. If not specified, Extended LSA support status
          is inherited from the instance level configuration.";
       reference
-        "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
          Extensibility, Appendix B - AreaExtendedLSASupport";
     }
   }
@@ -1269,7 +1354,7 @@ module ietf-ospfv3-extended-lsa {
        <xref target="RFC6242"/>. The lowest RESTCONF layer is HTTPS, and the
        mandatory-to-implement secure transport is TLS <xref target="RFC8446"/>.</t>
 
-   <t>The NETCONF access control model <xref target="RFC6536"/> provides the
+   <t>The NETCONF access control model <xref target="RFC8341"/> provides the
       means to restrict access for particular NETCONF or RESTCONF users to a
       pre-configured subset of all available NETCONF or RESTCONF protocol
       operations and content.</t>
@@ -1354,13 +1439,12 @@ module ietf-ospfv3-extended-lsa {
       &RFC6020;
       &RFC6241;
       &RFC6242;
-      &RFC6536;
       &RFC6991;
       &RFC7950;
-      &RFC8022;
       &RFC8040;
       &RFC8174;
       &RFC8294;
+      &RFC8341;
       &RFC8342;
       &RFC8349;
       &RFC8362;
