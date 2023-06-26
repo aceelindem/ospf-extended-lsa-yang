@@ -410,7 +410,7 @@ module: ietf-ospfv3-extended-lsa
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-06-20.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-06-26.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace
@@ -489,7 +489,7 @@ module ietf-ospfv3-extended-lsa {
 
   reference "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2023-06-20 {
+  revision 2023-06-26 {
     description
       "Initial revision.";
     reference
@@ -751,7 +751,8 @@ module ietf-ospfv3-extended-lsa {
           "External Prefix TLV Sub-TLVs";
         container ipv6-fwd-addr-sub-tlv {
           description
-            "IPv6 Forwarding Address Sub-TLV";
+            "IPv6 Forwarding address Sub-TLV for E-AS-External and
+             E-NSSA LSAs for the IPv6 address family.";
           leaf length {
             type uint16;
             description
@@ -761,7 +762,7 @@ module ietf-ospfv3-extended-lsa {
           leaf forwarding-address {
             type inet:ipv6-address;
             description
-              "Forwarding address";
+              "IPv6 Forwarding Address";
           }
           reference 
             "RFC 8362: OSPFv3 Link State Advertisement (LSA)
@@ -769,7 +770,8 @@ module ietf-ospfv3-extended-lsa {
         }
         container ipv4-fwd-addr-sub-tlv {
           description
-            "IPv4 Forwarding Address Sub-TLV";
+            "IPv4 Forwarding address Sub-TLV for E-AS-External and
+             E-NSSA LSAs for the IPv4 address family.";
           leaf length {
             type uint16;
             description
@@ -779,7 +781,7 @@ module ietf-ospfv3-extended-lsa {
           leaf forwarding-address {
             type inet:ipv4-address;
             description
-              "Forwarding address";
+              "IPv4 Forwarding Address";
           }
           reference 
             "RFC 8362: OSPFv3 Link State Advertisement (LSA)
@@ -899,7 +901,7 @@ module ietf-ospfv3-extended-lsa {
 
   grouping ospfv3-e-lsa-area {
     description 
-      "Area scope OSPFv3 Extended LSAs.";
+      "Area-scope OSPFv3 Extended LSAs.";
     reference 
       "RFC 8362: OSPFv3 Link State Advertisement (LSA)
       Extensibility, Section 4";
@@ -986,7 +988,7 @@ module ietf-ospfv3-extended-lsa {
       list e-network-tlvs {
         description
           "E-Network LSA TLVs";
-        container unknown-tlv {
+        container unknown--tlv {
           uses ospf:tlv;
           description
             "Unknown E-Network TLV";
@@ -1147,7 +1149,7 @@ module ietf-ospfv3-extended-lsa {
 
   grouping ospfv3-e-lsa-as {
     description
-      "AS scope OSPFv3 Extended LSAs.";
+      "AS-scope OSPFv3 Extended LSAs.";
     container e-as-external {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-as-external-lsa'" {
@@ -1197,7 +1199,7 @@ module ietf-ospfv3-extended-lsa {
 
   grouping ospfv3-e-lsa-link {
     description
-      "Link scope OSPFv3 Extended LSAs.";
+      "Link-scope OSPFv3 Extended LSAs.";
     container e-link {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-link-lsa'" {
@@ -1238,7 +1240,7 @@ module ietf-ospfv3-extended-lsa {
         "This augments the OSPFv3 routing protocol when used.";
     }
     description
-      "This augments the OSPFv3 protocol configuration
+      "This augments the OSPFv3 protocol instance-level configuration
        with Extended LSA support.";
     leaf extended-lsa-support {
       type boolean;
@@ -1256,11 +1258,11 @@ module ietf-ospfv3-extended-lsa {
     + "rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area" {
     when "../../../rt:type = 'ospf:ospfv3'" {
       description
-        "This augments the OSPFv3 area configuration
+        "This augments the OSPFv3 protocol area-level configuration
          when used.";
     }
     description
-      "This augments the OSPFv3 protocol area
+      "This augments the OSPFv3 protocol area-level
        configuration with Extended LSA support.";
     leaf extended-lsa-support {
       type boolean;
@@ -1300,7 +1302,9 @@ module ietf-ospfv3-extended-lsa {
         "This augmentation is only valid for OSPFv3.";
     }
     description
-      "OSPFv3 Link-Scoped Extended LSAs";
+      "This augmentation adds OSPFv3 Link-Scoped Extended LSAs
+       to the operational state for an interface Link State
+       Database (LSDB).";
 
     uses ospfv3-e-lsa-link;
   }
@@ -1317,7 +1321,9 @@ module ietf-ospfv3-extended-lsa {
         "This augmentation is only valid for OSPFv3.";
     }
     description
-      "OSPFv3 Area-Scoped Extended LSAs";
+      "This augmentation adds OSPFv3 Area-Scoped Extended LSAs
+       to the operational state for an area Link State
+       Database (LSDB).";
 
     uses ospfv3-e-lsa-area;
   }
@@ -1334,11 +1340,14 @@ module ietf-ospfv3-extended-lsa {
         "This augmentation is only valid for OSPFv3.";
     }
     description
-      "OSPFv3 AS-Scoped Extended LSAs";
-
+      "This augmentation adds OSPFv3 AS-Scoped Extended LSAs
+       to the operational state for an AS instance-level Link
+       State Database (LSDB).";
+    
     uses ospfv3-e-lsa-as;
   }
 }
+
 <CODE ENDS>
       ]]></artwork>
   </section>
