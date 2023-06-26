@@ -486,9 +486,128 @@ module ietf-ospfv3-extended-lsa {
        Extensibility, Section 3.9";
   }
 
-  grouping ospfv3-e-lsa-area {
+  /* Configuration */
+  augment "/rt:routing/rt:control-plane-protocols"
+        + "/rt:control-plane-protocol/ospf:ospf" {
+    when "../rt:type = 'ospf:ospfv3'" {
+      description
+        "This augments the OSPFv3 routing protocol when used.";
+    }
     description
-      "Area-scope OSPFv3 Extended LSAs.";
+      "This augments the OSPFv3 protocol instance-level configuration
+       with Extended LSA support.";
+    leaf extended-lsa-support {
+      type boolean;
+      default false;
+      description
+        "Enable OSPFv3 Extended LSA Support for the OSPFv3
+         domain";
+      reference
+        "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Appendix B - ExtendedLSASupport";
+    }
+  }
+
+  augment "/rt:routing/rt:control-plane-protocols/"
+    + "rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area" {
+    when "../../../rt:type = 'ospf:ospfv3'" {
+      description
+        "This augments the OSPFv3 protocol area-level configuration
+         when used.";
+    }
+    description
+      "This augments the OSPFv3 protocol area-level
+       configuration with Extended LSA support.";
+    leaf extended-lsa-support {
+      type boolean;
+      must  "derived-from(../ospf:area-type,'stub-nssa-area') or "
+         +  "(current() = 'true') or "
+         +  "(../../../extended-lsa-support = 'false')" {
+        description
+           "For regular areas, i.e., areas where AS-scoped LSAs
+            disabling AreaExtendedLSASupport for a regular
+            OSPFv3 area (not a Stub or NSSA area) when
+            ExtendedLSASupport is enabled is contradictory and
+            is prohibited.";
+      }
+      description
+        "Enable OSPFv3 Extended LSA Support for the OSPFv3
+         area. If not specified, Extended LSA support status
+         is inherited from the instance level configuration.";
+      reference
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Appendix B - AreaExtendedLSASupport";
+    }
+  }
+
+  /*
+   * Link State Database (LSDB) Augmentations
+  */
+  augment "/rt:routing/"
+    + "rt:control-plane-protocols/rt:control-plane-protocol/"
+    + "ospf:ospf/ospf:areas/ospf:area/"
+    + "ospf:interfaces/ospf:interface/ospf:database/"
+    + "ospf:link-scope-lsa-type/ospf:link-scope-lsas/"
+    + "ospf:link-scope-lsa/ospf:version/ospf:ospfv3/"
+    + "ospf:ospfv3/ospf:body" {
+    when "../../../../../../../../../../../"
+       + "rt:type = 'ospf:ospfv3'"  {
+      description
+        "This augmentation is only valid for OSPFv3.";
+    }
+    description
+      "This augmentation adds OSPFv3 Link-Scoped Extended LSAs
+       to the operational state for an interface Link State
+       Database (LSDB).";
+
+    container e-link {
+      when "../../ospf:header/ospf:type = "
+         + "'ospfv3-e-lsa:ospfv3-e-link-lsa'" {
+        description
+          "Only applies to Extended Link LSAs.";
+      }
+      description
+        "E-Link LSA";
+      reference
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Section 4.7";
+      leaf rtr-priority {
+        type uint8;
+        description
+          "Router Priority for the interface.";
+      }
+      uses ospf:ospfv3-lsa-options;
+      list e-link-tlvs {
+        description
+          "E-Link LSA TLVs";
+        container unknown-tlv {
+          uses ospf:tlv;
+          description
+            "Unknown E-Link TLV";
+        }
+        uses intra-area-prefix-tlv;
+        uses ipv6-link-local-tlv;
+        uses ipv4-link-local-tlv;
+      }
+    }
+  }
+
+  augment "/rt:routing/"
+    + "rt:control-plane-protocols/rt:control-plane-protocol/"
+    + "ospf:ospf/ospf:areas/ospf:area/ospf:database/"
+    + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
+    + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
+    + "ospf:ospfv3/ospf:body" {
+    when "../../../../../../../../../"
+       + "rt:type = 'ospf:ospfv3'" {
+      description
+        "This augmentation is only valid for OSPFv3.";
+    }
+    description
+      "This augmentation adds OSPFv3 Area-Scoped Extended LSAs
+       to the operational state for an area Link State
+       Database (LSDB).";
+
     reference
       "RFC 8362: OSPFv3 Link State Advertisement (LSA)
       Extensibility, Section 4";
@@ -601,6 +720,29 @@ module ietf-ospfv3-extended-lsa {
           }
         }
       }
+    }
+
+    container e-nssa {
+      when "../../ospf:header/ospf:type = "
+         + "'ospfv3-e-lsa:ospfv3-e-nssa-lsa'" {
+        description
+          "Only applies to E-NSSA LSAs.";
+      }
+      list e-external-tlvs {
+        description
+          "E-NSSA LSA TLVs";
+        container unknown-tlv {
+          uses ospf:tlv;
+          description
+            "Unknown E-External TLV";
+        }
+        uses external-prefix-tlv;
+      }
+      description
+        "E-NSSA LSA.";
+      reference
+        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Section 4.6";
     }
 
     container e-inter-area-prefix {
@@ -734,9 +876,22 @@ module ietf-ospfv3-extended-lsa {
     }
   }
 
-  grouping ospfv3-e-lsa-as {
+  augment "/rt:routing/"
+    + "rt:control-plane-protocols/rt:control-plane-protocol/"
+    + "ospf:ospf/ospf:database/"
+    + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
+    + "ospf:as-scope-lsa/ospf:version/ospf:ospfv3/"
+    + "ospf:ospfv3/ospf:body" {
+    when "../../../../../../../"
+      + "rt:type = 'ospf:ospfv3'" {
+      description
+        "This augmentation is only valid for OSPFv3.";
+    }
     description
-      "AS-scope OSPFv3 Extended LSAs.";
+      "This augmentation adds OSPFv3 AS-Scoped Extended LSAs
+       to the operational state for an AS instance-level Link
+       State Database (LSDB).";
+
     container e-as-external {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-as-external-lsa'" {
@@ -759,178 +914,5 @@ module ietf-ospfv3-extended-lsa {
         "RFC 8362: OSPFv3 Link State Advertisement (LSA)
         Extensibility, Section 4.5";
     }
-
-    container e-nssa {
-      when "../../ospf:header/ospf:type = "
-         + "'ospfv3-e-lsa:ospfv3-e-nssa-lsa'" {
-        description
-          "Only applies to E-NSSA LSAs.";
-      }
-      list e-external-tlvs {
-        description
-          "E-NSSA LSA TLVs";
-        container unknown-tlv {
-          uses ospf:tlv;
-          description
-            "Unknown E-External TLV";
-        }
-        uses external-prefix-tlv;
-      }
-      description
-        "E-NSSA LSA.";
-      reference
-        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-         Extensibility, Section 4.6";
-    }
-  }
-
-  grouping ospfv3-e-lsa-link {
-    description
-      "Link-scope OSPFv3 Extended LSAs.";
-    container e-link {
-      when "../../ospf:header/ospf:type = "
-         + "'ospfv3-e-lsa:ospfv3-e-link-lsa'" {
-        description
-          "Only applies to Extended Link LSAs.";
-      }
-      description
-        "E-Link LSA";
-      reference
-        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-         Extensibility, Section 4.7";
-      leaf rtr-priority {
-        type uint8;
-        description
-          "Router Priority for the interface.";
-      }
-      uses ospf:ospfv3-lsa-options;
-      list e-link-tlvs {
-        description
-          "E-Link LSA TLVs";
-        container unknown-tlv {
-          uses ospf:tlv;
-          description
-            "Unknown E-Link TLV";
-        }
-        uses intra-area-prefix-tlv;
-        uses ipv6-link-local-tlv;
-        uses ipv4-link-local-tlv;
-      }
-    }
-  }
-
-  /* Configuration */
-  augment "/rt:routing/rt:control-plane-protocols"
-        + "/rt:control-plane-protocol/ospf:ospf" {
-    when "../rt:type = 'ospf:ospfv3'" {
-      description
-        "This augments the OSPFv3 routing protocol when used.";
-    }
-    description
-      "This augments the OSPFv3 protocol instance-level configuration
-       with Extended LSA support.";
-    leaf extended-lsa-support {
-      type boolean;
-      default false;
-      description
-        "Enable OSPFv3 Extended LSA Support for the OSPFv3
-         domain";
-      reference
-        "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-         Extensibility, Appendix B - ExtendedLSASupport";
-    }
-  }
-
-  augment "/rt:routing/rt:control-plane-protocols/"
-    + "rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area" {
-    when "../../../rt:type = 'ospf:ospfv3'" {
-      description
-        "This augments the OSPFv3 protocol area-level configuration
-         when used.";
-    }
-    description
-      "This augments the OSPFv3 protocol area-level
-       configuration with Extended LSA support.";
-    leaf extended-lsa-support {
-      type boolean;
-      must  "derived-from(../ospf:area-type,'stub-nssa-area') or "
-         +  "(current() = 'true') or "
-         +  "(../../../extended-lsa-support = 'false')" {
-        description
-           "For regular areas, i.e., areas where AS-scoped LSAs
-            disabling AreaExtendedLSASupport for a regular
-            OSPFv3 area (not a Stub or NSSA area) when
-            ExtendedLSASupport is enabled is contradictory and
-            is prohibited.";
-      }
-      description
-        "Enable OSPFv3 Extended LSA Support for the OSPFv3
-         area. If not specified, Extended LSA support status
-         is inherited from the instance level configuration.";
-      reference
-        "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-         Extensibility, Appendix B - AreaExtendedLSASupport";
-    }
-  }
-
-  /*
-   * Link State Database (LSDB) Augmentations
-  */
-  augment "/rt:routing/"
-    + "rt:control-plane-protocols/rt:control-plane-protocol/"
-    + "ospf:ospf/ospf:areas/ospf:area/"
-    + "ospf:interfaces/ospf:interface/ospf:database/"
-    + "ospf:link-scope-lsa-type/ospf:link-scope-lsas/"
-    + "ospf:link-scope-lsa/ospf:version/ospf:ospfv3/"
-    + "ospf:ospfv3/ospf:body" {
-    when "../../../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv3'"  {
-      description
-        "This augmentation is only valid for OSPFv3.";
-    }
-    description
-      "This augmentation adds OSPFv3 Link-Scoped Extended LSAs
-       to the operational state for an interface Link State
-       Database (LSDB).";
-
-    uses ospfv3-e-lsa-link;
-  }
-
-  augment "/rt:routing/"
-    + "rt:control-plane-protocols/rt:control-plane-protocol/"
-    + "ospf:ospf/ospf:areas/ospf:area/ospf:database/"
-    + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
-    + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
-    + "ospf:ospfv3/ospf:body" {
-    when "../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv3'" {
-      description
-        "This augmentation is only valid for OSPFv3.";
-    }
-    description
-      "This augmentation adds OSPFv3 Area-Scoped Extended LSAs
-       to the operational state for an area Link State
-       Database (LSDB).";
-
-    uses ospfv3-e-lsa-area;
-  }
-
-  augment "/rt:routing/"
-    + "rt:control-plane-protocols/rt:control-plane-protocol/"
-    + "ospf:ospf/ospf:database/"
-    + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
-    + "ospf:as-scope-lsa/ospf:version/ospf:ospfv3/"
-    + "ospf:ospfv3/ospf:body" {
-    when "../../../../../../../"
-      + "rt:type = 'ospf:ospfv3'" {
-      description
-        "This augmentation is only valid for OSPFv3.";
-    }
-    description
-      "This augmentation adds OSPFv3 AS-Scoped Extended LSAs
-       to the operational state for an AS instance-level Link
-       State Database (LSDB).";
-
-    uses ospfv3-e-lsa-as;
   }
 }
