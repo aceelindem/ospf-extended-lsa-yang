@@ -76,7 +76,7 @@ module ietf-ospfv3-extended-lsa {
 
   reference "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2023-06-26 {
+  revision 2023-06-28 {
     description
       "Initial revision.";
     reference
@@ -708,15 +708,10 @@ module ietf-ospfv3-extended-lsa {
               "Attached Router TLV Length - Variable dependent
                on sub-TLVs";
           }
-          leaf-list Adjacent-neighbor-router-id {
+          leaf-list adjacent-neighbor-router-id {
             type rt-types:router-id;
             description
               "Adjacent Neighbor's Router ID";
-          }
-          list sub-tlvs {
-            description
-              "Attached Router TLV Sub-TLVs";
-            uses unknown-sub-tlv;
           }
         }
       }

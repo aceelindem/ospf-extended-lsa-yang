@@ -48,7 +48,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-17" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-19" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -275,7 +275,7 @@ module: ietf-ospfv3-extended-lsa
        |     |  +--ro value?    yang:hex-string
        |     +--ro attached-router-tlv
        |        +--ro length?                        uint16
-       |        +--ro Adjacent-neighbor-router-id*
+       |        +--ro adjacent-neighbor-router-id*
        |        |                         rt-types:router-id
        |        +--ro sub-tlvs* []
        |           +--ro unknown-sub-tlv
@@ -412,7 +412,7 @@ module: ietf-ospfv3-extended-lsa
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-06-26.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-06-28.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace
@@ -1400,10 +1400,10 @@ module ietf-ospfv3-extended-lsa {
    </artwork>
 </section>
     <section anchor="Acknowledgements" title="Acknowledgements">
-      <t>This document was produced using Marshall Rose's xml2rfc tool.</t>
       <t>The YANG model was developed using the suite of YANG tools written
       and maintained by numerous authors.</t>
-      <t>Thanks much to Tom Petch for his review and comments.</t>
+      <t>Thanks much to Tom Petch, Mahesh Jethanandani, and Renato Westphal
+      for their review and comments.</t>
     </section>
   </middle>
 
