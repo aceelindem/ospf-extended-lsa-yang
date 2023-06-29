@@ -48,7 +48,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-19" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-20" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -276,12 +276,7 @@ module: ietf-ospfv3-extended-lsa
        |     +--ro attached-router-tlv
        |        +--ro length?                        uint16
        |        +--ro adjacent-neighbor-router-id*
-       |        |                         rt-types:router-id
-       |        +--ro sub-tlvs* []
-       |           +--ro unknown-sub-tlv
-       |              +--ro type?     uint16
-       |              +--ro length?   uint16
-       |              +--ro value?    yang:hex-string
+       |                                  rt-types:router-id
        +--ro e-nssa
        |  +--ro e-external-tlvs* []
        |     +--ro unknown-tlv
@@ -412,7 +407,7 @@ module: ietf-ospfv3-extended-lsa
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-06-28.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-06-29.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace
@@ -491,7 +486,7 @@ module ietf-ospfv3-extended-lsa {
 
   reference "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2023-06-26 {
+  revision 2023-06-29 {
     description
       "Initial revision.";
     reference
@@ -1123,15 +1118,10 @@ module ietf-ospfv3-extended-lsa {
               "Attached Router TLV Length - Variable dependent
                on sub-TLVs";
           }
-          leaf-list Adjacent-neighbor-router-id {
+          leaf-list adjacent-neighbor-router-id {
             type rt-types:router-id;
             description
               "Adjacent Neighbor's Router ID";
-          }
-          list sub-tlvs {
-            description
-              "Attached Router TLV Sub-TLVs";
-            uses unknown-sub-tlv;
           }
         }
       }
