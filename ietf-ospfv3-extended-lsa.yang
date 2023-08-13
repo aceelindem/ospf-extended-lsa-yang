@@ -76,7 +76,7 @@ module ietf-ospfv3-extended-lsa {
 
   reference "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2023-07-23 {
+  revision 2023-08-13 {
     description
       "Initial revision.";
     reference
@@ -268,16 +268,39 @@ module ietf-ospfv3-extended-lsa {
        Extensibility, Section 6.3";
   }
 
+  grouping ospfv3-lsa-prefix {
+    description
+      "OSPFv3 LSA prefix";
+    leaf prefix {
+      type inet:ip-prefix;
+      description
+        "LSA Prefix";
+    }
+    container prefix-options {
+      leaf-list prefix-options {
+        type identityref {
+          base ospfv3-e-prefix-option;
+        }
+        description
+          "OSPFv3 prefix option flag list. This list will
+           contain the identities for the OSPFv3 options
+           that are set for the OSPFv3 prefix.";
+      }
+      description
+        "Prefix options.";
+      reference
+        "RFC 8362:  OSPFv3 Link State Advertisement (LSA)
+         Extensibility, Section 3.1";
+    }
+    reference
+      "RFC 8362: OSPFv3 Link State Advertisement (LSA)
+       Extensibility, Section 3";
+  }
+
   grouping external-prefix-tlv {
     container external-prefix-tlv {
       description
         "External Prefix LSA TLV";
-      leaf length {
-        type uint16;
-        description
-          "External Prefix TLV Length - Variable dependent
-           on sub-TLVs";
-      }
       container flags {
         leaf-list ospfv3-e-external-prefix-bits {
           type identityref {
@@ -294,7 +317,7 @@ module ietf-ospfv3-extended-lsa {
         description
           "External Prefix Metric";
       }
-      uses ospf:ospfv3-lsa-prefix;
+      uses ospfv3-lsa-prefix;
       list sub-tlvs {
         description
           "External Prefix TLV Sub-TLVs";
@@ -350,18 +373,12 @@ module ietf-ospfv3-extended-lsa {
     container intra-prefix-tlv {
       description
         "Intra-Area Prefix LSA TLV";
-      leaf length {
-        type uint16;
-        description
-          "Intra-Area Prefix TLV Length - Variable dependent
-           on sub-TLVs";
-      }
       leaf metric {
         type rt-types:uint24;
         description
           "Intra-Area Prefix Metric";
       }
-      uses ospf:ospfv3-lsa-prefix;
+      uses ospfv3-lsa-prefix;
       list sub-tlvs {
         description
           "Intra-Area Prefix TLV Sub-TLVs";
@@ -379,12 +396,6 @@ module ietf-ospfv3-extended-lsa {
     container ipv6-link-local-tlv {
       description
         "IPv6 Link-Local LSA TLV";
-      leaf length {
-        type uint16;
-        description
-          "IPv6 Link-Local TLV Length - Variable dependent
-           on sub-TLVs";
-      }
       leaf link-local-address {
         type inet:ipv6-address;
         description
@@ -407,12 +418,6 @@ module ietf-ospfv3-extended-lsa {
     container ipv4-link-local-tlv {
       description
         "IPv4 Link-Local LSA TLV";
-      leaf length {
-        type uint16;
-        description
-          "IPv4 Link-Local TLV Length - Variable dependent
-           on sub-TLVs";
-      }
       leaf link-local-address {
         type inet:ipv4-address;
         description
@@ -584,11 +589,6 @@ module ietf-ospfv3-extended-lsa {
         container link-tlv {
           description
             "E-Router LSA TLV";
-          leaf length {
-            type uint16;
-            description
-              "Link TLV Length - Variable dependent on sub-TLVs";
-          }
           leaf interface-id {
             type uint32;
             description
@@ -649,12 +649,6 @@ module ietf-ospfv3-extended-lsa {
         container attached-router-tlv {
           description
             "Attached Router TLV";
-          leaf length {
-            type uint16;
-            description
-              "Attached Router TLV Length - Variable dependent
-               on sub-TLVs";
-          }
           leaf-list adjacent-neighbor-router-id {
             type rt-types:router-id;
             description
@@ -709,18 +703,12 @@ module ietf-ospfv3-extended-lsa {
         container inter-prefix-tlv {
           description
             "Unknown E-Inter-Area-Prefix LSA TLV";
-          leaf length {
-            type uint16;
-            description
-              "Inter-Area-Prefix TLV Length - Variable dependent
-               on sub-TLVs";
-          }
           leaf metric {
             type rt-types:uint24;
               description
                 "Inter-Area Prefix Metric";
           }
-          uses ospf:ospfv3-lsa-prefix;
+          uses ospfv3-lsa-prefix;
           list sub-tlvs {
             description
               "Inter-Area Prefix TLV Sub-TLVs";
@@ -752,12 +740,6 @@ module ietf-ospfv3-extended-lsa {
         container inter-router-tlv {
           description
             "Unknown E-Inter-Area-Router LSA TLV";
-          leaf length {
-            type uint16;
-            description
-              "Inter-Area-Router TLV Length - Variable dependent
-               on sub-TLVs";
-          }
           uses ospf:ospfv3-lsa-options;
           leaf metric {
             type rt-types:uint24;
