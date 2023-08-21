@@ -48,7 +48,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-22" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-23" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -383,7 +383,7 @@ module: ietf-ospfv3-extended-lsa
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-08-13.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-08-21.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace
@@ -462,7 +462,7 @@ module ietf-ospfv3-extended-lsa {
 
   reference "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2023-08-13 {
+  revision 2023-08-21 {
     description
       "Initial revision.";
     reference
@@ -514,7 +514,7 @@ module ietf-ospfv3-extended-lsa {
       "OSPFv3 Extended Inter-area Router LSA - Type 0xA024";
     reference
       "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-       Extensibility, Section 4.3";
+       Extensibility, Section 4.4";
   }
 
   identity ospfv3-e-external-lsa-type {
@@ -775,7 +775,7 @@ module ietf-ospfv3-extended-lsa {
       "Intra-Area Prefix TLV Grouping";
     reference
       "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-       Extensibility, Section 3.4";
+       Extensibility, Section 3.7";
   }
 
   grouping ipv6-link-local-tlv {
@@ -840,7 +840,7 @@ module ietf-ospfv3-extended-lsa {
          domain";
       reference
         "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-         Extensibility, Appendix B - ExtendedLSASupport";
+         Extensibility, Appendix B - Area Configuration Support";
     }
   }
 
@@ -874,7 +874,7 @@ module ietf-ospfv3-extended-lsa {
          is inherited from the instance level configuration.";
       reference
         "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-         Extensibility, Appendix B - AreaExtendedLSASupport";
+         Extensibility, Appendix B - Area Configuration Support";
     }
   }
 
@@ -1297,7 +1297,7 @@ module ietf-ospfv3-extended-lsa {
       <t>The YANG model was developed using the suite of YANG tools written
       and maintained by numerous authors.</t>
       <t>Thanks much to Tom Petch, Mahesh Jethanandani, Renato Westphal,
-      and Victoria Pritchard for their review and comments.</t>
+      Victoria Pritchard, and Chris Hopps for their review and comments.</t>
     </section>
   </middle>
 
@@ -1344,7 +1344,7 @@ module ietf-ospfv3-extended-lsa {
     </references>
     
     <section>
-      <name>A Configuration Example</name>
+      <name>Configuration Example</name>
         <t>The following is an XML example using the YANG model for OSPFv3 Extended LSAs.</t>
         <t>Note: '\' line wrapping per <xref target="RFC8792" format="default"/>. </t>
         <artwork name="" type="" align="left" alt=""><![CDATA[
