@@ -48,7 +48,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-23" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-24" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -383,53 +383,46 @@ module: ietf-ospfv3-extended-lsa
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-08-21.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-11-29.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
-  namespace
-   "urn:ietf:params:xml:ns:yang:ietf-ospfv3-extended-lsa";
-
+  namespace "urn:ietf:params:xml:ns:yang:ietf-ospfv3-extended-lsa";
   prefix ospfv3-e-lsa;
 
   import ietf-routing-types {
-    prefix "rt-types";
+    prefix rt-types;
     reference
       "RFC 8294: Common YANG Data Types for the Routing Area";
   }
-
   import ietf-inet-types {
-    prefix "inet";
+    prefix inet;
     reference
       "RFC 6991: Common YANG Data Types";
   }
-
   import ietf-routing {
-    prefix "rt";
+    prefix rt;
     reference
       "RFC 8349: A YANG Data Model for Routing
        Management (NMDA Version)";
   }
-
   import ietf-ospf {
-    prefix "ospf";
+    prefix ospf;
     reference
       "RFC 9129: A YANG Data Model for OSPF Protocol";
   }
 
   organization
     "IETF LSR - Link State Routing Working Group";
-
   contact
-     "WG Web:   <https://datatracker.ietf.org/wg/lsr/>
-      WG List:  <mailto:lsr@ietf.org>
+    "WG Web:   <https://datatracker.ietf.org/wg/lsr/>
+     WG List:  <mailto:lsr@ietf.org>
 
-      Author:   Acee Lindem
-                <mailto:acee.ietf@gmail.com>
-      Author:   Sharmila Palani
-                <mailto:sharmila.palani@microsoft.com>
-      Author:   Yingzhen Qu
-                <mailto:yingzhen.qu@futurewei.com>";
-
+     Author:   Acee Lindem
+               <mailto:acee.ietf@gmail.com>
+     Author:   Sharmila Palani
+               <mailto:sharmila.palani@microsoft.com>
+     Author:   Yingzhen Qu
+               <mailto:yingzhen.qu@futurewei.com>";
   description
     "This YANG module defines the configuration
      and operational state for OSPFv3 Extended LSAs, which is
@@ -459,10 +452,10 @@ module ietf-ospfv3-extended-lsa {
      'MAY', and 'OPTIONAL' in this document are to be interpreted as
      described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
      they appear in all capitals, as shown here.";
+  reference
+    "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  reference "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
-
-  revision 2023-08-21 {
+  revision 2023-11-29 {
     description
       "Initial revision.";
     reference
@@ -472,6 +465,7 @@ module ietf-ospfv3-extended-lsa {
   /*
    * OSPFv3 Extend LSA Type Identities
    */
+
   identity ospfv3-e-router-lsa {
     base ospf:ospfv3-lsa-type;
     description
@@ -823,6 +817,7 @@ module ietf-ospfv3-extended-lsa {
   }
 
   /* Configuration */
+
   augment "/rt:routing/rt:control-plane-protocols"
         + "/rt:control-plane-protocol/ospf:ospf" {
     when "../rt:type = 'ospf:ospfv3'" {
@@ -834,7 +829,7 @@ module ietf-ospfv3-extended-lsa {
        with Extended LSA support.";
     leaf extended-lsa-support {
       type boolean;
-      default false;
+      default "false";
       description
         "Enable OSPFv3 Extended LSA Support for the OSPFv3
          domain";
@@ -845,7 +840,8 @@ module ietf-ospfv3-extended-lsa {
   }
 
   augment "/rt:routing/rt:control-plane-protocols/"
-    + "rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area" {
+        + "rt:control-plane-protocol/ospf:ospf/ospf:"
+        + "areas/ospf:area" {
     when "../../../rt:type = 'ospf:ospfv3'" {
       description
         "This augments the OSPFv3 protocol area-level configuration
@@ -856,17 +852,17 @@ module ietf-ospfv3-extended-lsa {
        configuration with Extended LSA support.";
     leaf extended-lsa-support {
       type boolean;
-      must  "derived-from(../ospf:area-type,'stub-nssa-area') or "
-         +  "(current() = 'true') or "
-         +  "(../../../extended-lsa-support = 'false')" {
+      must "derived-from(../ospf:area-type,'stub-nssa-area') or "
+         + "(current() = 'true') or "
+         + "(../../../extended-lsa-support = 'false')" {
         description
-           "For regular areas, i.e., areas where AS-scoped LSAs
-            are flooded, disabling AreaExtendedLSASupport at the
-            area level is prohibited when ExtendedLSASupport is
-            enabled at the instance level. AS-External LSAs
-            are flooded into all OSPFv3 regular areas  (i.e., not
-            a stub or an NSSA area) and disabling support at the
-            area level is not possible.";
+          "For regular areas, i.e., areas where AS-scoped LSAs
+           are flooded, disabling AreaExtendedLSASupport at the
+           area level is prohibited when ExtendedLSASupport is
+           enabled at the instance level. AS-External LSAs
+           are flooded into all OSPFv3 regular areas  (i.e., not
+           a stub or an NSSA area) and disabling support at the
+           area level is not possible.";
       }
       description
         "Enable OSPFv3 Extended LSA Support for the OSPFv3
@@ -880,16 +876,17 @@ module ietf-ospfv3-extended-lsa {
 
   /*
    * Link State Database (LSDB) Augmentations
-  */
+   */
+
   augment "/rt:routing/"
-    + "rt:control-plane-protocols/rt:control-plane-protocol/"
-    + "ospf:ospf/ospf:areas/ospf:area/"
-    + "ospf:interfaces/ospf:interface/ospf:database/"
-    + "ospf:link-scope-lsa-type/ospf:link-scope-lsas/"
-    + "ospf:link-scope-lsa/ospf:version/ospf:ospfv3/"
-    + "ospf:ospfv3/ospf:body" {
+        + "rt:control-plane-protocols/rt:control-plane-protocol/"
+        + "ospf:ospf/ospf:areas/ospf:area/"
+        + "ospf:interfaces/ospf:interface/ospf:database/"
+        + "ospf:link-scope-lsa-type/ospf:link-scope-lsas/"
+        + "ospf:link-scope-lsa/ospf:version/ospf:ospfv3/"
+        + "ospf:ospfv3/ospf:body" {
     when "../../../../../../../../../../../"
-       + "rt:type = 'ospf:ospfv3'"  {
+       + "rt:type = 'ospf:ospfv3'" {
       description
         "This augmentation is only valid for OSPFv3.";
     }
@@ -897,7 +894,6 @@ module ietf-ospfv3-extended-lsa {
       "This augmentation adds OSPFv3 Link-Scoped Extended LSAs
        to the operational state for an interface Link State
        Database (LSDB).";
-
     container e-link {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-link-lsa'" {
@@ -931,11 +927,11 @@ module ietf-ospfv3-extended-lsa {
   }
 
   augment "/rt:routing/"
-    + "rt:control-plane-protocols/rt:control-plane-protocol/"
-    + "ospf:ospf/ospf:areas/ospf:area/ospf:database/"
-    + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
-    + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
-    + "ospf:ospfv3/ospf:body" {
+        + "rt:control-plane-protocols/rt:control-plane-protocol/"
+        + "ospf:ospf/ospf:areas/ospf:area/ospf:database/"
+        + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
+        + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
+        + "ospf:ospfv3/ospf:body" {
     when "../../../../../../../../../"
        + "rt:type = 'ospf:ospfv3'" {
       description
@@ -945,14 +941,12 @@ module ietf-ospfv3-extended-lsa {
       "This augmentation adds OSPFv3 Area-Scoped Extended LSAs
        to the operational state for an area Link State
        Database (LSDB).";
-
     reference
       "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-      Extensibility, Section 4";
-
+       Extensibility, Section 4";
     container e-router {
-      when  "../../ospf:header/ospf:type = "
-        + "'ospfv3-e-lsa:ospfv3-e-router-lsa'" {
+      when "../../ospf:header/ospf:type = "
+         + "'ospfv3-e-lsa:ospfv3-e-router-lsa'" {
         description
           "Only valid for OSPFv3 Extended-Router LSAs";
       }
@@ -963,7 +957,6 @@ module ietf-ospfv3-extended-lsa {
          Extensibility, Section 4.1";
       uses ospf:ospf-router-lsa-bits;
       uses ospf:ospfv3-lsa-options;
-
       list e-router-tlvs {
         description
           "E-Router LSA TLVs";
@@ -1000,8 +993,8 @@ module ietf-ospfv3-extended-lsa {
           }
           leaf metric {
             type uint16;
-              description
-                "Link Metric";
+            description
+              "Link Metric";
           }
           list sub-tlvs {
             description
@@ -1011,7 +1004,6 @@ module ietf-ospfv3-extended-lsa {
         }
       }
     }
-
     container e-network {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-network-lsa'" {
@@ -1043,7 +1035,6 @@ module ietf-ospfv3-extended-lsa {
         }
       }
     }
-
     container e-nssa {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-nssa-lsa'" {
@@ -1066,7 +1057,6 @@ module ietf-ospfv3-extended-lsa {
         "RFC 8362: OSPFv3 Link State Advertisement (LSA)
          Extensibility, Section 4.6";
     }
-
     container e-inter-area-prefix {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-inter-area-prefix-lsa'" {
@@ -1091,8 +1081,8 @@ module ietf-ospfv3-extended-lsa {
             "Unknown E-Inter-Area-Prefix LSA TLV";
           leaf metric {
             type rt-types:uint24;
-              description
-                "Inter-Area Prefix Metric";
+            description
+              "Inter-Area Prefix Metric";
           }
           uses ospfv3-lsa-prefix;
           list sub-tlvs {
@@ -1103,7 +1093,6 @@ module ietf-ospfv3-extended-lsa {
         }
       }
     }
-
     container e-inter-area-router {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-inter-area-router-lsa'" {
@@ -1129,8 +1118,8 @@ module ietf-ospfv3-extended-lsa {
           uses ospf:ospfv3-lsa-options;
           leaf metric {
             type rt-types:uint24;
-              description
-                "Inter-Area Router Metric";
+            description
+              "Inter-Area Router Metric";
           }
           leaf destination-router-id {
             type rt-types:router-id;
@@ -1145,7 +1134,6 @@ module ietf-ospfv3-extended-lsa {
         }
       }
     }
-
     container e-intra-area-prefix {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-intra-area-prefix-lsa'" {
@@ -1186,13 +1174,13 @@ module ietf-ospfv3-extended-lsa {
   }
 
   augment "/rt:routing/"
-    + "rt:control-plane-protocols/rt:control-plane-protocol/"
-    + "ospf:ospf/ospf:database/"
-    + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
-    + "ospf:as-scope-lsa/ospf:version/ospf:ospfv3/"
-    + "ospf:ospfv3/ospf:body" {
+        + "rt:control-plane-protocols/rt:control-plane-protocol/"
+        + "ospf:ospf/ospf:database/"
+        + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
+        + "ospf:as-scope-lsa/ospf:version/ospf:ospfv3/"
+        + "ospf:ospfv3/ospf:body" {
     when "../../../../../../../"
-      + "rt:type = 'ospf:ospfv3'" {
+       + "rt:type = 'ospf:ospfv3'" {
       description
         "This augmentation is only valid for OSPFv3.";
     }
@@ -1200,7 +1188,6 @@ module ietf-ospfv3-extended-lsa {
       "This augmentation adds OSPFv3 AS-Scoped Extended LSAs
        to the operational state for an AS instance-level Link
        State Database (LSDB).";
-
     container e-as-external {
       when "../../ospf:header/ospf:type = "
          + "'ospfv3-e-lsa:ospfv3-e-as-external-lsa'" {
@@ -1221,7 +1208,7 @@ module ietf-ospfv3-extended-lsa {
         "E-AS-External LSA.";
       reference
         "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-        Extensibility, Section 4.5";
+         Extensibility, Section 4.5";
     }
   }
 }
@@ -1342,7 +1329,7 @@ module ietf-ospfv3-extended-lsa {
       &RFC8340;
       &RFC8792;
     </references>
-    
+
     <section>
       <name>Configuration Example</name>
         <t>The following is an XML example using the YANG model for OSPFv3 Extended LSAs.</t>
