@@ -48,7 +48,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-24" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-25" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -88,7 +88,7 @@
       </address>
     </author>
     <author fullname="Yingzhen Qu" initials="Y" surname="Qu">
-      <organization>Futurewei</organization>
+      <organization>Futurewei Technologies</organization>
       <address>
         <postal>
           <street>2330 Central Expressway</street>
@@ -98,7 +98,7 @@
           <country>USA</country>
         </postal>
         <phone></phone>
-        <email>yingzhen.qu@futurewei.com</email>
+        <email>yingzhen.ietf@gmail.com</email>
       </address>
     </author>
     <date/>
@@ -185,7 +185,7 @@
    configuration and state. The OSPF YANG model augments the ietf-routing YANG
    model defined in <xref target="RFC8349"/>.
    The augmentations defined in the ietf-ospfv3-extended-lsa YANG
-   model will provide global configuration, area configuration, and addition of OSPFv3
+   module provide global configuration, area configuration, and addition of OSPFv3
    Extended LSAs to the Link State Database (LSDB) operational state.</t>
       <artwork>
 module: ietf-ospfv3-extended-lsa
@@ -383,7 +383,7 @@ module: ietf-ospfv3-extended-lsa
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2023-11-29.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2024-01-10.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-ospfv3-extended-lsa";
@@ -422,7 +422,7 @@ module ietf-ospfv3-extended-lsa {
      Author:   Sharmila Palani
                <mailto:sharmila.palani@microsoft.com>
      Author:   Yingzhen Qu
-               <mailto:yingzhen.qu@futurewei.com>";
+               <mailto:yingzhen.ietf@gmail.com>";
   description
     "This YANG module defines the configuration
      and operational state for OSPFv3 Extended LSAs, which is
@@ -433,7 +433,7 @@ module ietf-ospfv3-extended-lsa {
      This YANG model conforms to the Network Management
      Datastore Architecture (NMDA) as described in RFC 8342.
 
-     Copyright (c) 2023 IETF Trust and the persons identified as
+     Copyright (c) 2024 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -455,7 +455,7 @@ module ietf-ospfv3-extended-lsa {
   reference
     "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2023-11-29 {
+  revision 2024-01-10 {
     description
       "Initial revision.";
     reference
@@ -463,7 +463,7 @@ module ietf-ospfv3-extended-lsa {
   }
 
   /*
-   * OSPFv3 Extend LSA Type Identities
+   * OSPFv3 Extended LSA Type Identities
    */
 
   identity ospfv3-e-router-lsa {
@@ -1242,8 +1242,8 @@ module ietf-ospfv3-extended-lsa {
       </t>
       <ul spacing="compact" empty="true">
         <li>/ospf:ospf/extended-lsa-support</li>
-        <li>/ospf:ospf/ospf:areas/ospf:area/extended-lsa-support - For OSPFv3
-        Extended LSAs, the ability to disable OSPFv3 Extended LSA support result in a
+        <li>/ospf:ospf/ospf:areas/ospf:area/extended-lsa-support</li>
+        <li>The ability to disable OSPFv3 Extended LSA support can result in a
         denial of service.</li>
       </ul>
 
@@ -1251,9 +1251,9 @@ module ietf-ospfv3-extended-lsa {
       may be considered sensitive or vulnerable in some network environments. It is thus
       important to control read access (e.g., via get, get-config, or notification)
       to these data nodes. The exposure of the Link State Database (LSDB) will
-      expose the detailed topology of the network and information beyond the scope of
-      OSPF router. This may be undesirable since
-      both due to the fact that exposure may facilitate other attacks. Additionally,
+      expose the detailed topology of the network. This includes topological information
+      from other routers. This may be undesirable 
+      due to the fact that exposure may facilitate other attacks. Additionally,
       network operators may consider their topologies to be sensitive confidential
       data.</t>
 
