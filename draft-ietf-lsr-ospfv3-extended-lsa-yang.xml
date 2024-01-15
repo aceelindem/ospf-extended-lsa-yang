@@ -48,7 +48,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-25" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-26" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -383,7 +383,7 @@ module: ietf-ospfv3-extended-lsa
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2024-01-10.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2024-01-15.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-ospfv3-extended-lsa";
@@ -455,7 +455,7 @@ module ietf-ospfv3-extended-lsa {
   reference
     "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2024-01-10 {
+  revision 2024-01-15 {
     description
       "Initial revision.";
     reference
@@ -572,7 +572,8 @@ module ietf-ospfv3-extended-lsa {
        from IPv6 unicast calculations.";
     reference
       "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-       Extensibility, Section 3.1";
+       Extensibility, Section 3.1
+       RFC 5340: OSPF for IPv6, Appendix A.4.1.1";
   }
 
   identity la-bit {
@@ -582,7 +583,8 @@ module ietf-ospfv3-extended-lsa {
        address of the Advertising Router.";
     reference
       "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-       Extensibility, Section 3.1";
+       Extensibility, Section 3.1
+       RFC 5340: OSPF for IPv6, Appendix A.4.1.1";
   }
 
   identity p-bit {
@@ -593,7 +595,8 @@ module ietf-ospfv3-extended-lsa {
        by the translating NSSA Border Router.";
     reference
       "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-       Extensibility, Section 3.1";
+       Extensibility, Section 3.1
+       RFC 5340: OSPF for IPv6, Appendix A.4.1.1";
   }
 
   identity dn-bit {
@@ -604,7 +607,8 @@ module ietf-ospfv3-extended-lsa {
        L3VPN prefix.";
     reference
       "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-       Extensibility, Section 3.1";
+       Extensibility, Section 3.1
+       RFC 5340: OSPF for IPv6, Appendix A.4.1.1";
   }
 
   identity n-bit {
@@ -614,7 +618,8 @@ module ietf-ospfv3-extended-lsa {
        the advertising router.";
     reference
       "RFC 8362: OSPFv3 Link State Advertisement (LSA)
-       Extensibility, Section 3.1";
+       Extensibility, Section 3.1
+       RFC 5340: OSPF for IPv6, Appendix A.4.1.1";
   }
 
   identity ospfv3-e-external-prefix-option {
@@ -628,8 +633,12 @@ module ietf-ospfv3-extended-lsa {
   identity e-bit {
     base ospfv3-e-external-prefix-option;
     description
-      "When set, the metric specified is a Type 2
-       external metric.";
+      "When the E-bit is set, the metric specified is a Type 2
+       external metric. This means the metric is considered larger
+       than any intra-AS path.  When the E-bit is clear, the
+       specified metric is a Type 1 external metric.  This means
+       that it is expressed in the same units as other LSAs (i.e.,
+       the same units as the interface costs in router-LSAs).";
     reference
       "RFC 8362: OSPFv3 Link State Advertisement (LSA)
        Extensibility, Section 3.6";
