@@ -48,7 +48,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-26" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-27" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -187,20 +187,22 @@
    The augmentations defined in the ietf-ospfv3-extended-lsa YANG
    module provide global configuration, area configuration, and addition of OSPFv3
    Extended LSAs to the Link State Database (LSDB) operational state.</t>
-      <artwork>
+   <artwork>
 module: ietf-ospfv3-extended-lsa
+
   augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf:
+            /rt:control-plane-protocol/ospf:ospf:
     +--rw extended-lsa-support?   boolean
   augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area:
+            /rt:control-plane-protocol/ospf:ospf/ospf:areas
+            /ospf:area:
     +--rw extended-lsa-support?   boolean
   augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-          /ospf:interfaces/ospf:interface/ospf:database
-          /ospf:link-scope-lsa-type/ospf:link-scope-lsas
-          /ospf:link-scope-lsa/ospf:version/ospf:ospfv3
-          /ospf:ospfv3/ospf:body:
+            /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+            /ospf:interfaces/ospf:interface/ospf:database
+            /ospf:link-scope-lsa-type/ospf:link-scope-lsas
+            /ospf:link-scope-lsa/ospf:version/ospf:ospfv3/ospf:ospfv3
+            /ospf:body:
     +--ro e-link
        +--ro rtr-priority?   uint8
        +--ro lsa-options
@@ -211,7 +213,7 @@ module: ietf-ospfv3-extended-lsa
           |  +--ro length?   uint16
           |  +--ro value?    yang:hex-string
           +--ro intra-prefix-tlv
-          |  +--ro metric?           rt-types:uint24
+          |  +--ro metric?           ospf:ospf-metric
           |  +--ro prefix?           inet:ip-prefix
           |  +--ro prefix-options
           |  |  +--ro prefix-options*   identityref
@@ -235,10 +237,10 @@ module: ietf-ospfv3-extended-lsa
                    +--ro length?   uint16
                    +--ro value?    yang:hex-string
   augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-          /ospf:database/ospf:area-scope-lsa-type
-          /ospf:area-scope-lsas/ospf:area-scope-lsa
-          /ospf:version/ospf:ospfv3/ospf:ospfv3/ospf:body:
+            /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+            /ospf:database/ospf:area-scope-lsa-type
+            /ospf:area-scope-lsas/ospf:area-scope-lsa/ospf:version
+            /ospf:ospfv3/ospf:ospfv3/ospf:body:
     +--ro e-router
     |  +--ro router-bits
     |  |  +--ro rtr-lsa-bits*   identityref
@@ -254,7 +256,7 @@ module: ietf-ospfv3-extended-lsa
     |        +--ro neighbor-interface-id?   uint32
     |        +--ro neighbor-router-id?      rt-types:router-id
     |        +--ro type?                    ospf:router-link-type
-    |        +--ro metric?                  uint16
+    |        +--ro metric?                  ospf:ospf-link-metric
     |        +--ro sub-tlvs* []
     |           +--ro unknown-sub-tlv
     |              +--ro type?     uint16
@@ -279,7 +281,7 @@ module: ietf-ospfv3-extended-lsa
     |     +--ro external-prefix-tlv
     |        +--ro flags
     |        |  +--ro ospfv3-e-external-prefix-bits*   identityref
-    |        +--ro metric?           rt-types:uint24
+    |        +--ro metric?           ospf:ospf-metric
     |        +--ro prefix?           inet:ip-prefix
     |        +--ro prefix-options
     |        |  +--ro prefix-options*   identityref
@@ -301,7 +303,7 @@ module: ietf-ospfv3-extended-lsa
     |     |  +--ro length?   uint16
     |     |  +--ro value?    yang:hex-string
     |     +--ro inter-prefix-tlv
-    |        +--ro metric?           rt-types:uint24
+    |        +--ro metric?           ospf:ospf-metric
     |        +--ro prefix?           inet:ip-prefix
     |        +--ro prefix-options
     |        |  +--ro prefix-options*   identityref
@@ -319,7 +321,7 @@ module: ietf-ospfv3-extended-lsa
     |     +--ro inter-router-tlv
     |        +--ro lsa-options
     |        |  +--ro lsa-options*   identityref
-    |        +--ro metric?                  rt-types:uint24
+    |        +--ro metric?                  ospf:ospf-metric
     |        +--ro destination-router-id?   rt-types:router-id
     |        +--ro sub-tlvs* []
     |           +--ro unknown-sub-tlv
@@ -336,7 +338,7 @@ module: ietf-ospfv3-extended-lsa
           |  +--ro length?   uint16
           |  +--ro value?    yang:hex-string
           +--ro intra-prefix-tlv
-             +--ro metric?           rt-types:uint24
+             +--ro metric?           ospf:ospf-metric
              +--ro prefix?           inet:ip-prefix
              +--ro prefix-options
              |  +--ro prefix-options*   identityref
@@ -346,10 +348,10 @@ module: ietf-ospfv3-extended-lsa
                    +--ro length?   uint16
                    +--ro value?    yang:hex-string
   augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:database
-          /ospf:as-scope-lsa-type/ospf:as-scope-lsas
-          /ospf:as-scope-lsa/ospf:version/ospf:ospfv3
-          /ospf:ospfv3/ospf:body:
+            /rt:control-plane-protocol/ospf:ospf/ospf:database
+            /ospf:as-scope-lsa-type/ospf:as-scope-lsas
+            /ospf:as-scope-lsa/ospf:version/ospf:ospfv3/ospf:ospfv3
+            /ospf:body:
     +--ro e-as-external
        +--ro e-external-tlvs* []
           +--ro unknown-tlv
@@ -359,7 +361,7 @@ module: ietf-ospfv3-extended-lsa
           +--ro external-prefix-tlv
              +--ro flags
              |  +--ro ospfv3-e-external-prefix-bits*   identityref
-             +--ro metric?           rt-types:uint24
+             +--ro metric?           ospf:ospf-metric
              +--ro prefix?           inet:ip-prefix
              +--ro prefix-options
              |  +--ro prefix-options*   identityref
@@ -374,7 +376,8 @@ module: ietf-ospfv3-extended-lsa
                    +--ro type?     uint16
                    +--ro length?   uint16
                    +--ro value?    yang:hex-string
-      </artwork>
+     
+   </artwork>
   </section>
 
 
@@ -383,7 +386,7 @@ module: ietf-ospfv3-extended-lsa
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2024-01-15.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2024-01-16.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-ospfv3-extended-lsa";
@@ -455,7 +458,7 @@ module ietf-ospfv3-extended-lsa {
   reference
     "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2024-01-15 {
+  revision 2024-01-16 {
     description
       "Initial revision.";
     reference
@@ -702,7 +705,7 @@ module ietf-ospfv3-extended-lsa {
           "External Prefix Flags";
       }
       leaf metric {
-        type rt-types:uint24;
+        type ospf:ospf-metric;
         description
           "External Prefix Metric";
       }
@@ -763,7 +766,7 @@ module ietf-ospfv3-extended-lsa {
       description
         "Intra-Area Prefix LSA TLV";
       leaf metric {
-        type rt-types:uint24;
+        type ospf:ospf-metric;
         description
           "Intra-Area Prefix Metric";
       }
@@ -1001,7 +1004,7 @@ module ietf-ospfv3-extended-lsa {
                           4 - Virtual Link";
           }
           leaf metric {
-            type uint16;
+            type ospf:ospf-link-metric;
             description
               "Link Metric";
           }
@@ -1089,7 +1092,7 @@ module ietf-ospfv3-extended-lsa {
           description
             "Unknown E-Inter-Area-Prefix LSA TLV";
           leaf metric {
-            type rt-types:uint24;
+            type ospf:ospf-metric;
             description
               "Inter-Area Prefix Metric";
           }
@@ -1126,7 +1129,7 @@ module ietf-ospfv3-extended-lsa {
             "Unknown E-Inter-Area-Router LSA TLV";
           uses ospf:ospfv3-lsa-options;
           leaf metric {
-            type rt-types:uint24;
+            type ospf:ospf-metric;
             description
               "Inter-Area Router Metric";
           }
@@ -1221,6 +1224,7 @@ module ietf-ospfv3-extended-lsa {
     }
   }
 }
+
 <CODE ENDS>
       ]]></artwork>
   </section>
@@ -1293,7 +1297,7 @@ module ietf-ospfv3-extended-lsa {
       <t>The YANG model was developed using the suite of YANG tools written
       and maintained by numerous authors.</t>
       <t>Thanks much to Tom Petch, Mahesh Jethanandani, Renato Westphal,
-      Victoria Pritchard, and Chris Hopps for their review and comments.</t>
+      Victoria Pritchard, Reshad Rahman, and Chris Hopps for their review and comments.</t>
     </section>
   </middle>
 
