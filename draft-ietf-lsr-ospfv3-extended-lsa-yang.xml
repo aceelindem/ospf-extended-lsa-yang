@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc [
-    <!ENTITY RFC2119 PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'>
     <!ENTITY RFC3688 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3688.xml'>
     <!ENTITY RFC5340 PUBLIC ''
@@ -18,8 +16,6 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7950.xml'>
     <!ENTITY RFC8040 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8040.xml'>
-    <!ENTITY RFC8174 PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml'>
     <!ENTITY RFC8294 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8294.xml'>
     <!ENTITY RFC8340 PUBLIC ''
@@ -48,7 +44,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-27" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-28" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -154,17 +150,6 @@
 
       <t>The YANG modules in this document conform to the Network Management
          Datastore Architecture (NMDA) <xref target="RFC8342"/>.</t>
-
-      <section title="Requirements Language">
-        <t>
-          The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-          NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
-          "MAY", and "OPTIONAL" in this document are to be interpreted as
-          described in BCP 14 <xref target="RFC2119" format="default"/>
-          <xref target="RFC8174" format="default"/>
-          when, and only when, they appear in all capitals, as shown here.
-      </t>
-      </section>
     </section>
 
     <section title="Tree Diagrams">
@@ -386,7 +371,7 @@ module: ietf-ospfv3-extended-lsa
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2024-01-16.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2024-01-30.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-ospfv3-extended-lsa";
@@ -448,17 +433,12 @@ module ietf-ospfv3-extended-lsa {
 
      This version of this YANG module is part of RFC XXXX
      (https://www.rfc-editor.org/info/rfcXXXX); see the RFC itself
-     for full legal notices.
+     for full legal notices.";
 
-     The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL
-     NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'NOT RECOMMENDED',
-     'MAY', and 'OPTIONAL' in this document are to be interpreted as
-     described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
-     they appear in all capitals, as shown here.";
   reference
     "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2024-01-16 {
+  revision 2024-01-30 {
     description
       "Initial revision.";
     reference
@@ -1224,7 +1204,6 @@ module ietf-ospfv3-extended-lsa {
     }
   }
 }
-
 <CODE ENDS>
       ]]></artwork>
   </section>
@@ -1319,7 +1298,6 @@ module ietf-ospfv3-extended-lsa {
 
     <references title="Normative References">
       <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
-      &RFC2119;
       &RFC3688;
       &RFC5340;
       &RFC6020;
@@ -1328,7 +1306,6 @@ module ietf-ospfv3-extended-lsa {
       &RFC6991;
       &RFC7950;
       &RFC8040;
-      &RFC8174;
       &RFC8294;
       &RFC8341;
       &RFC8342;
