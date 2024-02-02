@@ -42,7 +42,8 @@ module ietf-ospfv3-extended-lsa {
      and operational state for OSPFv3 Extended LSAs, which is
      common across all of the vendor implementations. The
      semantics and encodings for OSPFv3 Extended LSAs are
-     described in RFC 8362.
+     described in RFC 8362. OSPFv3 Extended LSAs provide extensible
+     TLV-based LSAs for the base LSA types defined in RFC 5340.
 
      This YANG model conforms to the Network Management
      Datastore Architecture (NMDA) as described in RFC 8342.
@@ -64,7 +65,7 @@ module ietf-ospfv3-extended-lsa {
   reference
     "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2024-01-30 {
+  revision 2024-02-02 {
     description
       "Initial revision.";
     reference
@@ -444,7 +445,13 @@ module ietf-ospfv3-extended-lsa {
     }
     description
       "This augments the OSPFv3 protocol instance-level configuration
-       with Extended LSA support.";
+       with Extended LSA support. When enabled, OSPFv3 Extended LSAs
+       will be advertised and OSPFv3 Legacy LSAs will not be
+       advertised. When disabled, OSPFv3 Legacy LSAs will be
+       advertised. However, OSPFv3 Extended LSAs could still be
+       advertised in Extended LSA Sparse-Mode to support
+       incrementally-deployed features as described insection 6.2 of
+       RFC 8362.";
     leaf extended-lsa-support {
       type boolean;
       default "false";
@@ -453,7 +460,7 @@ module ietf-ospfv3-extended-lsa {
          domain";
       reference
         "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-         Extensibility, Appendix B - Area Configuration Support";
+         Extensibility, Appendix A - Global Configuration Support";
     }
   }
 
@@ -483,9 +490,15 @@ module ietf-ospfv3-extended-lsa {
            area level is not possible.";
       }
       description
-        "Enable OSPFv3 Extended LSA Support for the OSPFv3
-         area. If not specified, Extended LSA support status
-         is inherited from the instance level configuration.";
+        "This augments the OSPFv3 protocol area-level configuration
+         with Extended LSA support. When enabled, OSPFv3 Extended
+         LSAs will be advertised and OSPFv3 Legacy LSAs will not be
+         advertised. When disabled, OSPFv3 Legacy LSAs will be
+         advertised. However, OSPFv3 Extended LSAs could still be
+         advertised in Extended LSA Sparse-Mode to support
+         incrementally-deployed features as described insection
+         6.2 of RFC 8362. If not specified, Extended LSA support
+         status is inherited from the instance-level configuration.";
       reference
         "RFC 8362: OSPFv3 Link State Advertisement (LSA)
          Extensibility, Appendix B - Area Configuration Support";

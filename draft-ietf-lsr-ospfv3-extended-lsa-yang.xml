@@ -44,7 +44,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-28" ipr="trust200902"
+<rfc category="std" docName="draft-ietf-lsr-ospfv3-extended-lsa-yang-29" ipr="trust200902"
      consensus="true" submissionType="IETF" version="3">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -371,7 +371,7 @@ module: ietf-ospfv3-extended-lsa
    but are referenced in the ietf-ospfv3-extended-lsa.yang module:
    <xref target="RFC6991"/>, <xref target="RFC8294"/>.</t>
       <artwork><![CDATA[
-<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2024-01-30.yang"
+<CODE BEGINS> file "ietf-ospfv3-extended-lsa@2024-02-02.yang"
 module ietf-ospfv3-extended-lsa {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-ospfv3-extended-lsa";
@@ -416,7 +416,8 @@ module ietf-ospfv3-extended-lsa {
      and operational state for OSPFv3 Extended LSAs, which is
      common across all of the vendor implementations. The
      semantics and encodings for OSPFv3 Extended LSAs are
-     described in RFC 8362.
+     described in RFC 8362. OSPFv3 Extended LSAs provide extensible
+     TLV-based LSAs for the base LSA types defined in RFC 5340.
 
      This YANG model conforms to the Network Management
      Datastore Architecture (NMDA) as described in RFC 8342.
@@ -438,7 +439,7 @@ module ietf-ospfv3-extended-lsa {
   reference
     "RFC XXXX - YANG Model for OSPFv3 Extended LSAs";
 
-  revision 2024-01-30 {
+  revision 2024-02-02 {
     description
       "Initial revision.";
     reference
@@ -818,7 +819,13 @@ module ietf-ospfv3-extended-lsa {
     }
     description
       "This augments the OSPFv3 protocol instance-level configuration
-       with Extended LSA support.";
+       with Extended LSA support. When enabled, OSPFv3 Extended LSAs
+       will be advertised and OSPFv3 Legacy LSAs will not be
+       advertised. When disabled, OSPFv3 Legacy LSAs will be
+       advertised. However, OSPFv3 Extended LSAs could still be
+       advertised in Extended LSA Sparse-Mode to support
+       incrementally-deployed features as described insection 6.2 of
+       RFC 8362.";
     leaf extended-lsa-support {
       type boolean;
       default "false";
@@ -827,7 +834,7 @@ module ietf-ospfv3-extended-lsa {
          domain";
       reference
         "RFC 8362 - OSPFv3 Link State Advertisement (LSA)
-         Extensibility, Appendix B - Area Configuration Support";
+         Extensibility, Appendix A - Global Configuration Support";
     }
   }
 
@@ -857,9 +864,15 @@ module ietf-ospfv3-extended-lsa {
            area level is not possible.";
       }
       description
-        "Enable OSPFv3 Extended LSA Support for the OSPFv3
-         area. If not specified, Extended LSA support status
-         is inherited from the instance level configuration.";
+        "This augments the OSPFv3 protocol area-level configuration
+         with Extended LSA support. When enabled, OSPFv3 Extended
+         LSAs will be advertised and OSPFv3 Legacy LSAs will not be
+         advertised. When disabled, OSPFv3 Legacy LSAs will be
+         advertised. However, OSPFv3 Extended LSAs could still be
+         advertised in Extended LSA Sparse-Mode to support
+         incrementally-deployed features as described insection
+         6.2 of RFC 8362. If not specified, Extended LSA support
+         status is inherited from the instance-level configuration.";
       reference
         "RFC 8362: OSPFv3 Link State Advertisement (LSA)
          Extensibility, Appendix B - Area Configuration Support";
@@ -1235,9 +1248,16 @@ module ietf-ospfv3-extended-lsa {
       <ul spacing="compact" empty="true">
         <li>/ospf:ospf/extended-lsa-support</li>
         <li>/ospf:ospf/ospf:areas/ospf:area/extended-lsa-support</li>
-        <li>The ability to disable OSPFv3 Extended LSA support can result in a
-        denial of service.</li>
       </ul>
+        <t>
+          The ability to disable or enable OSPFv3 Extended LSA support can result
+          in a Denial of Service (DoS) attack since OSPFv3 routers will use solely OSPFv3
+          Extended LSAs or OSPFv3 Legacy LSAs for the OSPFv3 SPF computation. OSPFv3
+          routers using different types of LSAs will
+          result in incomplete reachability and possible partioning of the OSPFv3 routing
+          domain. Refer to section 6 of <xref target="RFC8362"/> for more information on
+          OSPFv3 Extended LSA compatibility.
+        </t>
 
    <t>Some of the readable data nodes in the ietf-ospfv3-extended-lsa.yang module
       may be considered sensitive or vulnerable in some network environments. It is thus
